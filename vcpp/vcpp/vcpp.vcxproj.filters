@@ -525,6 +525,9 @@
     <ClCompile Include="CLIPS\watch.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="clipsbridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -1044,6 +1047,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CLIPS\watch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="clipsbridge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include <string>
+#include "clipsbridge.h"
+
+
 
 namespace vcpp {
 
@@ -16,9 +19,11 @@ namespace vcpp {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
-		MyForm(void)
+		MyForm(ClipsBridge *clipsMain)
 		{
 			InitializeComponent();
+			dealMark=0;
+			clips=clipsMain;
 			//
 			//TODO: Add the constructor code here
 			//
@@ -89,6 +94,8 @@ namespace vcpp {
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
+		ClipsBridge *clips;
+		int dealMark;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -480,33 +487,33 @@ namespace vcpp {
 
 		}
 #pragma endregion
-	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-		//double temp;
-		//temp = Convert::ToDouble(tbxTest->Text) - 32.0;
-		//temp = temp / 9.0;
-		//temp = temp * 5.0;
-		//tbxPlayerN->Text = Convert::ToString(temp);
-
-		//std::string cardsSorted[4][14]={{"4","9","A","\0"},{"7","10","\0"},{"2","5","Q","K","A","\0"},{"2","J","Q","\0"}};
-		std::string cardsSorted[4][15]={{"2","\0"},{"2","\0"},{"2","3","4","5","6","7","8","9","10","J","Q","K","A","\0"},{"2","\0"}};
-		int i, j, count;
+private: 
+	System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+		std::string cardsSorted;
+		std::string playersStr[4]={"N)","E)","S)","W)"};
+		char players[4]={'N','E','S','W'};
+		int i;
 		
-		std::string toPrintOut="";
-		for (j=0;j<4;++j) {
-			count=0;
-			for (i=0;i<14;++i) {
-				if (cardsSorted[j][i]!="\0") {
-					toPrintOut+=cardsSorted[j][i];
-					toPrintOut+=" ";
-				}
-				else {
-					toPrintOut+="\r\n\r\n";
-					break;
-				}
+		clips->DealCardsToPlayers(players[dealMark]);
+		if (++dealMark>3) {
+			dealMark=0;
+		}
+		for (i=0;i<4;++i) {
+			cardsSorted=clips->GetCardsDealtToPlayer(playersStr[i]);
+			String^ StrVal=gcnew String(cardsSorted.c_str());
+			if (i==0) {
+				tbxPlayerN->Text=StrVal;
+			}
+			else if (i==1) {
+				tbxPlayerE->Text=StrVal;
+			}
+			else if (i==2) {
+				tbxPlayerS->Text=StrVal;
+			}
+			else {
+				tbxPlayerW->Text=StrVal;
 			}
 		}
-		String^ StrVal=gcnew String(toPrintOut.c_str());
-		tbxPlayerN->Text=StrVal;
 	} // button1_Click
 };
 }

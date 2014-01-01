@@ -116,9 +116,9 @@
 
 
 (deftemplate card
-	(slot name)
-	(slot suit)
 	(slot player)
+	(slot suit)
+	(slot name)
 )
 
 
@@ -132,7 +132,7 @@
 	(test (< ?*dealt-cards* 52))
 =>
 	(bind ?*dealt-cards* (+ ?*dealt-cards* 1))
-	(assert (card (name ?name)(suit ?suit)(player N)))
+	(assert (card (player N)(suit ?suit)(name ?name)))
 	(assert (state picked-a-card))
 	(retract ?drawed-card)
 	(retract ?picked)
@@ -147,7 +147,7 @@
 	(test (< ?*dealt-cards* 52))
 =>
 	(bind ?*dealt-cards* (+ ?*dealt-cards* 1))
-	(assert (card (name ?name)(suit ?suit)(player E)))
+	(assert (card (player E)(suit ?suit)(name ?name)))
 	(assert (state picked-a-card))
 	(retract ?drawed-card)
 	(retract ?picked)
@@ -162,7 +162,7 @@
 	(test (< ?*dealt-cards* 52))
 =>
 	(bind ?*dealt-cards* (+ ?*dealt-cards* 1))
-	(assert (card (name ?name)(suit ?suit)(player S)))
+	(assert (card (player S)(suit ?suit)(name ?name)))
 	(assert (state picked-a-card))
 	(retract ?drawed-card)
 	(retract ?picked)
@@ -177,7 +177,7 @@
 	(test (< ?*dealt-cards* 52))
 =>
 	(bind ?*dealt-cards* (+ ?*dealt-cards* 1))
-	(assert (card (name ?name)(suit ?suit)(player W)))
+	(assert (card (player W)(suit ?suit)(name ?name)))
 	(assert (state picked-a-card))
 	(retract ?drawed-card)
 	(retract ?picked)
@@ -211,28 +211,28 @@
 (defglobal ?*W-pc* = 0)
 
 (defrule calculate-pc-N
-	(card (name ?card-name)(suit ?)(player N))
+	(card (player N)(suit ?)(name ?card-name))
 =>
 	(bind ?*N-pc* (+ ?*N-pc* (cardvalue ?card-name)))
 	(printout t ?*N-pc* crlf)
 )
 
 (defrule calculate-pc-E
-	(card (name ?card-name)(suit ?)(player E))
+	(card (player E)(suit ?)(name ?card-name))
 =>
 	(bind ?*E-pc* (+ ?*E-pc* (cardvalue ?card-name)))
 	(printout t ?*E-pc* crlf)
 )
 
 (defrule calculate-pc-S
-	(card (name ?card-name)(suit ?)(player S))
+	(card (player S)(suit ?)(name ?card-name))
 =>
 	(bind ?*S-pc* (+ ?*S-pc* (cardvalue ?card-name)))
 	(printout t ?*S-pc* crlf)
 )
 
 (defrule calculate-pc-W
-	(card (name ?card-name)(suit ?)(player W))
+	(card (player W)(suit ?)(name ?card-name))
 =>
 	(bind ?*W-pc* (+ ?*W-pc* (cardvalue ?card-name)))
 	(printout t ?*W-pc* crlf)
