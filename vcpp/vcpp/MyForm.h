@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include <string>
 #include "clipsbridge.h"
+#include "DialogBox.h"
+#include <iostream>
+#include "stringconversion.h"
+
 
 
 
@@ -18,12 +22,20 @@ namespace vcpp {
 	/// </summary>
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
+	private: 
+		System::ComponentModel::Container ^components;
+		ClipsBridge *clips;
+		String ^bid;
+	public: System::Windows::Forms::Label^  label5;
+			 int dealMark;
 	public:
 		MyForm(ClipsBridge *clipsMain)
 		{
 			InitializeComponent();
-			dealMark=0;
+			dealMark=-1;
 			clips=clipsMain;
+			bid=gcnew String("");
+			label5->Text=bid;
 			//
 			//TODO: Add the constructor code here
 			//
@@ -93,9 +105,8 @@ namespace vcpp {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
-		ClipsBridge *clips;
-		int dealMark;
+	private: System::Windows::Forms::Button^  button1;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -133,6 +144,8 @@ namespace vcpp {
 			this->pictureBox15 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox16 = (gcnew System::Windows::Forms::PictureBox());
 			this->tbxPlayerE = (gcnew System::Windows::Forms::TextBox());
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
@@ -430,11 +443,33 @@ namespace vcpp {
 			this->tbxPlayerE->TabIndex = 26;
 			this->tbxPlayerE->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
 			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(34, 70);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(75, 23);
+			this->button1->TabIndex = 32;
+			this->button1->Text = L"button1";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click_1);
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->Location = System::Drawing::Point(156, 70);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(35, 13);
+			this->label5->TabIndex = 34;
+			this->label5->Text = L"label5";
+			this->label5->TextChanged += gcnew System::EventHandler(this, &MyForm::label5_TextChanged);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(794, 591);
+			this->Controls->Add(this->label5);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->pictureBox13);
 			this->Controls->Add(this->pictureBox14);
@@ -490,14 +525,14 @@ namespace vcpp {
 private: 
 	System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 		std::string cardsSorted;
-		std::string playersStr[4]={"N)","E)","S)","W)"};
-		char players[4]={'N','E','S','W'};
+		const std::string playersStr[4]={"N)","E)","S)","W)"};
+		const char players[4]={'N','E','S','W'};
 		int i;
 		
-		clips->DealCardsToPlayers(players[dealMark]);
 		if (++dealMark>3) {
 			dealMark=0;
 		}
+		clips->DealCardsToPlayers(players[dealMark]);
 		for (i=0;i<4;++i) {
 			cardsSorted=clips->GetCardsDealtToPlayer(playersStr[i]);
 			String^ StrVal=gcnew String(cardsSorted.c_str());
@@ -515,5 +550,24 @@ private:
 			}
 		}
 	} // button1_Click
+private:
+	System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e) {
+		DialogBox ^dlg1 = gcnew DialogBox(label5);
+		dlg1->Show();
+	}
+private:
+	System::Void label5_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		const char players[4]={'N','E','S','W'};
+		if (label5->Text!="") {
+			bid=label5->Text;
+			
+			const char* charBid=(const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bid)).ToPointer();
+
+			std::cout << "bid: " << charBid << std::endl;
+			clips->PlayerBids(charBid, players[dealMark]);
+			System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
+			clips->PrintFacts();
+		}
+	}
 };
 }

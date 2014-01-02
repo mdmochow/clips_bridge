@@ -122,6 +122,15 @@
 )
 
 
+(deftemplate bid
+	(slot number)
+	(slot player)
+	(slot type)
+	(slot level)
+	(slot suit)
+)
+
+
 (defglobal ?*dealt-cards* = 0)
 
 (defrule pick-top-card-N
@@ -236,4 +245,38 @@
 =>
 	(bind ?*W-pc* (+ ?*W-pc* (cardvalue ?card-name)))
 	(printout t ?*W-pc* crlf)
+)
+
+(defrule end-of-bidding
+	 ;byly 3 pasy
+=>
+
+)
+
+(defrule bid-player-N
+	 ?bid <- (state N-should-bid)
+=>
+	(retract ?bid)
+	(assert (state E-should-bid))
+)
+
+(defrule bid-player-E
+	 ?bid <- (state E-should-bid)
+=>
+	(retract ?bid)
+	(assert (state S-should-bid))
+)
+
+(defrule bid-player-S
+	 ?bid <- (state S-should-bid)
+=>
+	(retract ?bid)
+	(assert (state W-should-bid))
+)
+
+(defrule bid-player-W
+	 ?bid <- (state W-should-bid)
+=>
+	(retract ?bid)
+	(assert (state N-should-bid))
 )

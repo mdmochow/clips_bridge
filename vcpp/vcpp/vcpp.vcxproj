@@ -242,8 +242,10 @@
     <ClCompile Include="CLIPS\userfunctions.c" />
     <ClCompile Include="CLIPS\utility.c" />
     <ClCompile Include="CLIPS\watch.c" />
+    <ClCompile Include="DialogBox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="stringconversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -426,11 +428,18 @@
     <ClInclude Include="CLIPS\usrsetup.h" />
     <ClInclude Include="CLIPS\utility.h" />
     <ClInclude Include="CLIPS\watch.h" />
+    <ClInclude Include="DialogBox.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="stringconversion.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DialogBox.resx">
+      <DependentUpon>DialogBox.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
     </EmbeddedResource>

@@ -12,25 +12,30 @@ void EnvUserFunctions(void *);
 void SwapIOB(FILE *A, FILE *B);
 
 
+
 class ClipsBridge {
 public:
 	void *theEnv;
+	std::string bid;
 
 	ClipsBridge();
 	~ClipsBridge();
+	void ClipsBridge::PrintFacts(void);
 	void ClipsBridge::DealCardsToPlayers(char player);
 	std::string ClipsBridge::GetCardsDealtToPlayer(std::string player);
+	void ClipsBridge::PlayerBids(std::string bid, char player);
+
 
 private:
 	char buffer[BUFFER_SIZE];
-	std::stringstream sStrm;
 	DATA_OBJECT multifieldDO;
 	void *multifieldPtr;
-	int end, i;
 	FILE *fp;
+	int bidCounter;
 
 	int ClipsBridge::GetCardNumber(std::string arg);
 	std::string ClipsBridge::SortCards(int cards[4][14]);
+	char ClipsBridge::NextPlayer(char player);
 };
 
 #endif

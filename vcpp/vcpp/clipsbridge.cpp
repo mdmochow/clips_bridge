@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "clipsbridge.h"
 #include <iostream>
-//#include <string>
+#include <map>
 
 
 void SwapIOB(FILE *A, FILE *B) {
@@ -14,7 +14,7 @@ void SwapIOB(FILE *A, FILE *B) {
 
 
 
-ClipsBridge::ClipsBridge() {
+ClipsBridge::ClipsBridge(): bidCounter(0) {
 	fp=fopen("clips_bridge.log","w");
 	SwapIOB(stdout,fp);
 
@@ -30,6 +30,22 @@ ClipsBridge::~ClipsBridge() {
 	DestroyEnvironment(theEnv);
 	fclose(stdout);
 }
+
+
+
+
+void ClipsBridge::PrintFacts(void) {
+	int i, end;
+	GetFactList(&multifieldDO,NULL);
+	end=GetDOEnd(multifieldDO);
+	multifieldPtr=GetValue(multifieldDO);
+	std::cout << std::endl << std::endl;
+	for (i=GetDOBegin(multifieldDO);i<=end;i++) {
+		PPFact((fact *)GetMFValue(multifieldPtr,i),"stdout",0);
+	}
+	std::cout << std::endl << std::endl;
+}
+
 
 
 
@@ -134,7 +150,8 @@ std::string ClipsBridge::SortCards(int cards[4][14]) {
 
 std::string ClipsBridge::GetCardsDealtToPlayer(std::string player) {
 	std::string temp, retval;
-	int idxS=0, idxH=0, idxD=0, idxC=0, i, j, cards[4][14];
+	std::stringstream sStrm;
+	int idxS=0, idxH=0, idxD=0, idxC=0, i, j, end, cards[4][14];
 
 	for (i=0;i<4;++i) {
 		for (j=0;j<14;++j) {
@@ -147,7 +164,7 @@ std::string ClipsBridge::GetCardsDealtToPlayer(std::string player) {
 	multifieldPtr=GetValue(multifieldDO);
 	for (i=GetDOBegin(multifieldDO);i<=end;i++) {
 		GetFactPPForm(buffer,BUFFER_SIZE,(fact *)GetMFValue(multifieldPtr,i));
-		std::cout << buffer << std::endl;
+		//std::cout << buffer << std::endl;
 		sStrm << buffer;
 		sStrm >> temp; // fact number
 		sStrm >> temp; // "(card"
@@ -188,6 +205,51 @@ std::string ClipsBridge::GetCardsDealtToPlayer(std::string player) {
 
 	retval=SortCards(cards);
 	return retval;
+}
+
+
+
+
+char ClipsBridge::NextPlayer(char player) {
+	const char players[5]={'N','E','S','W','N'};
+	int i;
+	for (i=0;i<4;++i) {
+		if (players[i]==player) {
+			break;
+		}
+	}
+	return players[i+1];
+}
+
+
+
+
+void ClipsBridge::PlayerBids(std::string bid, char player) {
+	int level;
+	std::stringstream sStrm;
+	char suit[3];
+	++bidCounter;
+
+	if (bid=="PASS") {
+		sprintf(buffer,"(bid (number %d)(player %c)(type pass)(level 0)(suit empty))",bidCounter,player);
+	}
+	else if (bid=="DOUBLE") {
+		sprintf(buffer,"(bid (number %d)(player %c)(type double)(level 0)(suit empty))",bidCounter,player);
+	}
+	else if (bid=="REDOUBLE") {
+		sprintf(buffer,"(bid (number %d)(player %c)(type redouble)(level 0)(suit empty))",bidCounter,player);
+	}
+	else {
+		sStrm << bid;
+		sStrm >> level;
+		sStrm >> suit;
+		std::cout << "SUIT: " << suit << std::endl;
+		sprintf(buffer,"(bid (number %d)(player %c)(type normal)(level %d)(suit %s))",bidCounter,player,level,suit);
+	}
+	AssertString(buffer);
+	sprintf(buffer,"(state %c-should-bid)",NextPlayer(player));
+	AssertString(buffer);
+	//Run(-1);
 }
    
 

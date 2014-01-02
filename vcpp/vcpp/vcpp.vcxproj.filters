@@ -528,6 +528,12 @@
     <ClCompile Include="clipsbridge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DialogBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stringconversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -1051,6 +1057,12 @@
     </ClInclude>
     <ClInclude Include="clipsbridge.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stringconversion.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
