@@ -553,13 +553,23 @@ private:
 		}
 		while (clips->Bidding()) {
 			if (players[currentBidder]=='N') {
-			{
-				
+				if (++currentBidder>3) {
+					currentBidder=0;
+				}
 			}
 			else {
 				DialogBox ^wnd = gcnew DialogBox(label5);
 				//wnd->AcceptButton( <- Submit enterem
 				wnd->ShowDialog();
+				bid=label5->Text;
+				const char* charBid=(const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bid)).ToPointer();
+				std::cout << "bid: " << charBid << std::endl;
+				clips->PlayerBids(charBid, players[currentBidder]);
+				if (++currentBidder>3) {
+					currentBidder=0;
+				}
+				System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
+				clips->PrintFacts();
 			}
 		}
 	} // button1_Click
@@ -569,16 +579,6 @@ private:
 private:
 	System::Void label5_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 		const char players[4]={'N','E','S','W'};
-		if (label5->Text!="") {
-			bid=label5->Text;
-			
-			const char* charBid=(const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bid)).ToPointer();
-
-			std::cout << "bid: " << charBid << std::endl;
-			clips->PlayerBids(charBid, players[dealMark]);
-			System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
-			clips->PrintFacts();
-		}
 	}
 };
 }

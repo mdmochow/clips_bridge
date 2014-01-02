@@ -24,7 +24,7 @@ public:
 	void ClipsBridge::DealCardsToPlayers(char player);
 	std::string ClipsBridge::GetCardsDealtToPlayer(std::string player);
 	void ClipsBridge::PlayerBids(std::string bid, char player);
-
+	bool ClipsBridge::Bidding(void);
 
 private:
 	char buffer[BUFFER_SIZE];
@@ -32,6 +32,7 @@ private:
 	void *multifieldPtr;
 	FILE *fp;
 	int bidCounter;
+	long tmp, bidCnt, zero;
 
 	int ClipsBridge::GetCardNumber(std::string arg);
 	std::string ClipsBridge::SortCards(int cards[4][14]);

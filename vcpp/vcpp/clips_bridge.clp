@@ -268,7 +268,7 @@
 	;(retract ?bid-player)
 	;(assert (state E-should-bid))
 	(assert (state bid-made))
-	(bind ?*bids-made* (+ ?*bids-made 1))
+	(bind ?*bids-made* (+ ?*bids-made* 1))
 	(assert (bid (number ?*bids-made*)(player ?bidder)(type pass)(level 0)(suit empty)))
 	(retract ?bid-player)
 )
