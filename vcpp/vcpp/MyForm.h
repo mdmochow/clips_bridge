@@ -26,13 +26,15 @@ namespace vcpp {
 		System::ComponentModel::Container ^components;
 		ClipsBridge *clips;
 		String ^bid;
+		int currentBidder;
+		int dealMark;
 	public: System::Windows::Forms::Label^  label5;
-			 int dealMark;
 	public:
 		MyForm(ClipsBridge *clipsMain)
 		{
 			InitializeComponent();
 			dealMark=-1;
+			currentBidder=0;
 			clips=clipsMain;
 			bid=gcnew String("");
 			label5->Text=bid;
@@ -549,11 +551,20 @@ private:
 				tbxPlayerW->Text=StrVal;
 			}
 		}
+		while (clips->Bidding()) {
+			if (players[currentBidder]=='N') {
+			{
+				
+			}
+			else {
+				DialogBox ^wnd = gcnew DialogBox(label5);
+				//wnd->AcceptButton( <- Submit enterem
+				wnd->ShowDialog();
+			}
+		}
 	} // button1_Click
 private:
 	System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e) {
-		DialogBox ^dlg1 = gcnew DialogBox(label5);
-		dlg1->Show();
 	}
 private:
 	System::Void label5_TextChanged(System::Object^  sender, System::EventArgs^  e) {

@@ -55,6 +55,8 @@ void ClipsBridge::DealCardsToPlayers(char startPlayer) {
 	sprintf(buffer,"(state %c-should-pick)",startPlayer);
 	AssertString(buffer);
 	Run(-1);
+	sprintf(buffer,"(bid (number 0)(player empty)(type empty)(level 0)(suit empty))");
+	AssertString(buffer);
 }
 
 
@@ -247,7 +249,7 @@ void ClipsBridge::PlayerBids(std::string bid, char player) {
 		sprintf(buffer,"(bid (number %d)(player %c)(type normal)(level %d)(suit %s))",bidCounter,player,level,suit);
 	}
 	AssertString(buffer);
-	sprintf(buffer,"(state %c-should-bid)",NextPlayer(player));
+	sprintf(buffer,"(player %c)",NextPlayer(player));
 	AssertString(buffer);
 	//Run(-1);
 }

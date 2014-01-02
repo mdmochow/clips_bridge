@@ -247,36 +247,34 @@
 	(printout t ?*W-pc* crlf)
 )
 
+(defglobal ?*pass-count* = 0)
+(defglobal ?*bids-made* = 0)
+
+
 (defrule end-of-bidding
-	 ;byly 3 pasy
+	(test (= ?*pass-count* 3))
 =>
-
+	(assert (state bidding-finished))
 )
 
-(defrule bid-player-N
-	 ?bid <- (state N-should-bid)
+(defrule bid-pass
+	(not(state bidding-finished))
+	(not(state bid-made))
+	;?bid-player <- (state N-should-bid)
+	?bid-player <- (player ?bidder)
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?bid-lvl)(suit ?bid-suit))
+	(test (= ?*bids-made* ?bid-nr))
 =>
-	(retract ?bid)
-	(assert (state E-should-bid))
+	;(retract ?bid-player)
+	;(assert (state E-should-bid))
+	(assert (state bid-made))
+	(bind ?*bids-made* (+ ?*bids-made 1))
+	(assert (bid (number ?*bids-made*)(player ?bidder)(type pass)(level 0)(suit empty)))
+	(retract ?bid-player)
 )
 
-(defrule bid-player-E
-	 ?bid <- (state E-should-bid)
+(defrule made-a-bid
+	?bidfact <- (state bid-made)
 =>
-	(retract ?bid)
-	(assert (state S-should-bid))
-)
-
-(defrule bid-player-S
-	 ?bid <- (state S-should-bid)
-=>
-	(retract ?bid)
-	(assert (state W-should-bid))
-)
-
-(defrule bid-player-W
-	 ?bid <- (state W-should-bid)
-=>
-	(retract ?bid)
-	(assert (state N-should-bid))
+	(retract ?bidfact)
 )
