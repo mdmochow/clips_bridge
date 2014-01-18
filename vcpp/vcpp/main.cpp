@@ -1,5 +1,6 @@
 #include "MyForm.h"
 #include "clipsbridge.h"
+#include "cardsontable.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -9,7 +10,8 @@ int main(array<String^>^ argv) {
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
 
-	ClipsBridge clips;
+	CardsOnTable cards;
+	ClipsBridge clips(&cards);
 
     vcpp::MyForm form(&clips);
     Application::Run(%form);

@@ -1,8 +1,8 @@
 ﻿#include <stdio.h>
 #include "clipsbridge.h"
 #include <iostream>
-#include <map>
 
+#pragma warning(disable: 4996)
 
 void SwapIOB(FILE *A, FILE *B) {
     FILE temp;
@@ -14,7 +14,9 @@ void SwapIOB(FILE *A, FILE *B) {
 
 
 
-ClipsBridge::ClipsBridge(): bidCounter(0), ourPlayer('N') {
+ClipsBridge::ClipsBridge(CardsOnTable *mainCards): bidCounter(0), ourPlayer('N') {
+	cards=mainCards;
+
 	fp=fopen("clips_bridge.log","w");
 	SwapIOB(stdout,fp);
 
@@ -105,36 +107,28 @@ int ClipsBridge::GetCardNumber(std::string arg) {
 
 
 
-std::string ClipsBridge::SortCards(int cards[4][14]) {
+std::string ClipsBridge::GetCardsInStringTableForPlayer(ePlayer player) {
 	std::string cardsSorted;
-	int i, j, k, tmp;
-
+	int i, j;
+	
+	eCard **pCards=cards->GetCards(player);
 	for (i=0;i<4;++i) {
 		for (j=0;j<14;++j) {
-			for (k=0;k<13;++k) {
-				if (cards[i][k]>cards[i][k+1]) {
-					tmp=cards[i][k];
-					cards[i][k]=cards[i][k+1];
-					cards[i][k+1]=tmp;
-				}
-			}
-		}
-		for (j=0;j<14;++j) {
-			if (cards[i][j]!=99) {
-				if (cards[i][j]==11) {
+			if (pCards[i][j]!=empty) {
+				if (pCards[i][j]==jack) {
 					cardsSorted+="J ";
 				}
-				else if (cards[i][j]==12) {
+				else if (pCards[i][j]==queen) {
 					cardsSorted+="Q ";
 				}
-				else if (cards[i][j]==13) {
+				else if (pCards[i][j]==king) {
 					cardsSorted+="K ";
 				}
-				else if (cards[i][j]==14) {
+				else if (pCards[i][j]==ace) {
 					cardsSorted+="A ";
 				}
 				else {
-					cardsSorted+=std::to_string(cards[i][j]);
+					cardsSorted+=std::to_string(pCards[i][j]);
 					cardsSorted+=" ";
 				}
 			}
@@ -205,7 +199,7 @@ std::string ClipsBridge::GetCardsDealtToPlayer(std::string player) {
 		sStrm.clear();
 	}
 
-	retval=SortCards(cards);
+	//retval=SortCards(cards);
 	return retval;
 }
 

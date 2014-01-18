@@ -53,6 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>"$(URBI_INSTALL_DIR)\include"</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cardsontable.cpp" />
     <ClCompile Include="clipsbridge.cpp" />
     <ClCompile Include="CLIPS\agenda.c" />
     <ClCompile Include="CLIPS\analysis.c" />
@@ -255,6 +257,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cardsontable.h" />
     <ClInclude Include="clipsbridge.h" />
     <ClInclude Include="CLIPS\agenda.h" />
     <ClInclude Include="CLIPS\analysis.h" />

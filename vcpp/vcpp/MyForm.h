@@ -4,9 +4,7 @@
 #include "DialogBox.h"
 #include <iostream>
 #include "stringconversion.h"
-
-
-
+#include "cardsontable.h"
 
 namespace vcpp {
 
@@ -623,15 +621,11 @@ namespace vcpp {
 		}
 #pragma endregion
 private: 
-	System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-		std::string cardsSorted;
-		const std::string playersStr[4]={"N)","E)","S)","W)"};
-		const char players[4]={'N','E','S','W'};
-		int i;
-		
+
+	void InitGame(void) {
+		clips->cards->ResetCards();
 		Reset();
 		clips->ResetBidCounter();
-
 		bidBoxN->Clear();
 		bidBoxE->Clear();
 		bidBoxS->Clear();
@@ -653,9 +647,17 @@ private:
 			}
 		}
 
-		clips->DealCardsToPlayers(players[dealMark]);
-		for (i=0;i<4;++i) {
-			cardsSorted=clips->GetCardsDealtToPlayer(playersStr[i]);
+		char buffer[80];
+		sprintf_s(buffer,"(bid (number 0)(player empty)(type empty)(level 0)(suit empty))");
+		AssertString(buffer);
+	}
+
+
+
+	void DisplayCards(void) {
+		std::string cardsSorted;
+		for (int i=0;i<4;++i) {
+			cardsSorted=clips->GetCardsInStringTableForPlayer(static_cast<ePlayer>(i));
 			String^ StrVal=gcnew String(cardsSorted.c_str());
 			if (i==0) {
 				tbxPlayerN->Text=StrVal;
@@ -670,13 +672,27 @@ private:
 				tbxPlayerW->Text=StrVal;
 			}
 		}
+	}
 
-		if (players[currentBidder]==clips->ourPlayer) {
+
+
+	System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+		const std::string playersStr[4]={"N)","E)","S)","W)"};
+		const char players[4]={'N','E','S','W'};
+		
+		InitGame();
+		// trzeba zrobić coś, co powpisuje karty do cards[][]
+		clips->cards->ReadCardsFromFile("table.txt");
+
+		DisplayCards();
+
+		/*if (players[currentBidder]==clips->ourPlayer) {
 			char buffer[15];
 			sprintf_s(buffer,"(player %c)",clips->ourPlayer);
 			AssertString(buffer);
-		}
+		}*/
 		clips->PrintFacts();
+
 		while (clips->Bidding()) {
 			if (players[currentBidder]==clips->ourPlayer) {
 				Run(-1);
@@ -724,4 +740,5 @@ private:
 		ShowDefglobals("stdout",NULL);
 	} // button1_Click
 };
-}
+
+} // namespace vcpp
