@@ -105,7 +105,7 @@
 	?nextcard <- (next-card ?number)
 	(draw-pile ?name ?suit ?number)
 =>
-	(printout t ?number ": " ?name " of " ?suit " has value " (card-value ?name) crlf)
+	;(printout t ?number ": " ?name " of " ?suit " has value " (card-value ?name) crlf)
 	(retract ?nextcard)
 	(assert (next-card (+ ?number 1)))
 )
@@ -228,28 +228,28 @@
 	(card (player N)(suit ?)(name ?card-name))
 =>
 	(bind ?*N-pc* (+ ?*N-pc* (cardvalue ?card-name)))
-	(printout t ?*N-pc* crlf)
+	;(printout t ?*N-pc* crlf)
 )
 
 (defrule calculate-pc-E
 	(card (player E)(suit ?)(name ?card-name))
 =>
 	(bind ?*E-pc* (+ ?*E-pc* (cardvalue ?card-name)))
-	(printout t ?*E-pc* crlf)
+	;(printout t ?*E-pc* crlf)
 )
 
 (defrule calculate-pc-S
 	(card (player S)(suit ?)(name ?card-name))
 =>
 	(bind ?*S-pc* (+ ?*S-pc* (cardvalue ?card-name)))
-	(printout t ?*S-pc* crlf)
+	;(printout t ?*S-pc* crlf)
 )
 
 (defrule calculate-pc-W
 	(card (player W)(suit ?)(name ?card-name))
 =>
 	(bind ?*W-pc* (+ ?*W-pc* (cardvalue ?card-name)))
-	(printout t ?*W-pc* crlf)
+	;(printout t ?*W-pc* crlf)
 )
 
 (defglobal ?*pass-count* = 0)
@@ -263,7 +263,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(defrule made-a-bid
+	?bidfact <- (state bid-made)
+=>
+	(retract ?bidfact)
+)
+
 (defrule bid-pass
+	;(made-a-bid)
 	;(not(state bid-made))
 	;?bid-player <- (state N-should-bid)
 	?bid-player <- (player ?bidder)
@@ -277,12 +284,6 @@
 	(assert (bid (number ?*bids-made*)(player ?bidder)(type pass)(level 0)(suit empty)))
 )
 
-(defrule made-a-bid
-	?bidfact <- (state bid-made)
-=>
-	(retract ?bidfact)
-)
-
 (deffunction end-of-bidding ()
 	(if (and (> ?*pass-count* 2)(> ?*bids-made* 3))
 	    then
@@ -290,3 +291,35 @@
 	    else
 		0)
 )
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(deffacts bidding-facts
+	(bidding no-opening)
+)
+
+
+(deftemplate bidding-opening
+	(slot player)
+	(slot level)
+	(slot suit)
+)
+
+
+(defglobal ?*ourplayer* = N)
+
+
+(defrule bidding-ourplayer-opened
+	?opening <- (bidding no-opening)
+	(bid (number ?)(player ?bid-player)(type normal)(level ?bid-lvl)(suit ?bid-suit))
+=>
+	(retract ?opening)
+	(assert (bidding-opening (player ?bid-player)(level ?bid-lvl)(suit ?bid-suit)))
+)
+

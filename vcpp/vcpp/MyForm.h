@@ -718,8 +718,10 @@ private:
 				}
 				System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
 				//clips->PrintFacts();
-			}
-		}
+			} // else
+		} // while (clips->Bidding())
+		clips->PrintFacts();
+		ShowDefglobals("stdout",NULL);
 	} // button1_Click
 };
 }
