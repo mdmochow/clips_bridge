@@ -676,7 +676,7 @@ private:
 			sprintf_s(buffer,"(player %c)",clips->ourPlayer);
 			AssertString(buffer);
 		}
-
+		clips->PrintFacts();
 		while (clips->Bidding()) {
 			if (players[currentBidder]==clips->ourPlayer) {
 				Run(-1);

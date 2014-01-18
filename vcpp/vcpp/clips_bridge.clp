@@ -136,7 +136,65 @@
 )
 
 
-(defglobal ?*dealt-cards* = 0)
+(defglobal ?*dealt-cards* = 52)
+
+
+(deffacts our-card-set
+	(card (player N)(suit spades)(name seven))
+	(card (player N)(suit spades)(name nine)) 
+	(card (player N)(suit spades)(name ten)) 
+	(card (player N)(suit hearts)(name three)) 
+	(card (player N)(suit hearts)(name five)) 
+	(card (player N)(suit hearts)(name ten)) 
+	(card (player N)(suit hearts)(name queen)) 
+	(card (player N)(suit hearts)(name king)) 
+	(card (player N)(suit diamonds)(name two)) 
+	(card (player N)(suit diamonds)(name ace)) 
+	(card (player N)(suit clubs)(name three)) 
+	(card (player N)(suit clubs)(name jack)) 
+	(card (player N)(suit clubs)(name king)) 
+	(card (player E)(suit hearts)(name seven)) 
+	(card (player E)(suit clubs)(name four)) 
+	(card (player E)(suit clubs)(name ace)) 
+	(card (player E)(suit clubs)(name queen)) 
+	(card (player E)(suit diamonds)(name seven)) 
+	(card (player E)(suit diamonds)(name four)) 
+	(card (player E)(suit hearts)(name six)) 
+	(card (player E)(suit diamonds)(name ten)) 
+	(card (player E)(suit clubs)(name seven)) 
+	(card (player E)(suit clubs)(name six)) 
+	(card (player E)(suit clubs)(name eight)) 
+	(card (player E)(suit diamonds)(name three)) 
+	(card (player E)(suit diamonds)(name eight)) 
+	(card (player S)(suit spades)(name king)) 
+	(card (player S)(suit diamonds)(name queen)) 
+	(card (player S)(suit clubs)(name nine)) 
+	(card (player S)(suit spades)(name ace)) 
+	(card (player S)(suit spades)(name eight)) 
+	(card (player S)(suit hearts)(name ace)) 
+	(card (player S)(suit spades)(name jack)) 
+	(card (player S)(suit clubs)(name five)) 
+	(card (player S)(suit spades)(name five)) 
+	(card (player S)(suit diamonds)(name nine)) 
+	(card (player S)(suit clubs)(name ten)) 
+	(card (player S)(suit spades)(name three)) 
+	(card (player S)(suit spades)(name queen)) 
+	(card (player W)(suit hearts)(name two)) 
+	(card (player W)(suit spades)(name two)) 
+	(card (player W)(suit diamonds)(name jack)) 
+	(card (player W)(suit hearts)(name nine)) 
+	(card (player W)(suit spades)(name four)) 
+	(card (player W)(suit diamonds)(name king)) 
+	(card (player W)(suit clubs)(name two)) 
+	(card (player W)(suit hearts)(name eight)) 
+	(card (player W)(suit spades)(name six)) 
+	(card (player W)(suit diamonds)(name five)) 
+	(card (player W)(suit hearts)(name four)) 
+	(card (player W)(suit hearts)(name jack)) 
+	(card (player W)(suit diamonds)(name six)) 
+)
+
+
 
 (defrule pick-top-card-N
 	?picked <- (state N-should-pick)
@@ -219,38 +277,119 @@
 	(return 0)
 )
 
+(deftemplate points
+	(slot player)
+	(slot pc)
+)
+
+(deftemplate hand
+	(slot player)
+	(slot spades)
+	(slot hearts)
+	(slot diamonds)
+	(slot clubs)
+)
+	
+
+(deffacts pre-calc-pts
+	(points (player N)(pc 0))
+	(points (player E)(pc 0))
+	(points (player S)(pc 0))
+	(points (player W)(pc 0))
+	(hand (player N)(spades 0)(hearts 0)(diamonds 0)(clubs 0))
+	(hand (player E)(spades 0)(hearts 0)(diamonds 0)(clubs 0))
+	(hand (player S)(spades 0)(hearts 0)(diamonds 0)(clubs 0))
+	(hand (player W)(spades 0)(hearts 0)(diamonds 0)(clubs 0))
+)	
+
 (defglobal ?*N-pc* = 0)
 (defglobal ?*E-pc* = 0)
 (defglobal ?*S-pc* = 0)
 (defglobal ?*W-pc* = 0)
 
+
+
 (defrule calculate-pc-N
 	(card (player N)(suit ?)(name ?card-name))
+	?pc-fact <- (points (player N)(pc ?pts))
+	(test (< ?*N-pts-calc* 13))
 =>
+	(bind ?*N-pts-calc* (+ ?*N-pts-calc* 1))
+	(retract ?pc-fact)
+	(bind ?pts (+ ?pts (cardvalue ?card-name)))
+	(assert (points (player N)(pc ?pts)))
 	(bind ?*N-pc* (+ ?*N-pc* (cardvalue ?card-name)))
-	;(printout t ?*N-pc* crlf)
+	(printout t ?*N-pc* crlf)
 )
 
 (defrule calculate-pc-E
+	?pc-fact <- (points (player E)(pc ?pts))
 	(card (player E)(suit ?)(name ?card-name))
 =>
+	(retract ?pc-fact)
+	(bind ?pts (+ ?pts (cardvalue ?card-name)))
+	(assert (points (player E)(pc ?pts)))
 	(bind ?*E-pc* (+ ?*E-pc* (cardvalue ?card-name)))
 	;(printout t ?*E-pc* crlf)
 )
-
+ 
 (defrule calculate-pc-S
+	?pc-fact <- (points (player S)(pc ?pts))
 	(card (player S)(suit ?)(name ?card-name))
 =>
+	(retract ?pc-fact)
+	(bind ?pts (+ ?pts (cardvalue ?card-name)))
+	(assert (points (player S)(pc ?pts)))
 	(bind ?*S-pc* (+ ?*S-pc* (cardvalue ?card-name)))
 	;(printout t ?*S-pc* crlf)
 )
-
+ 
 (defrule calculate-pc-W
+	?pc-fact <- (points (player W)(pc ?pts))
 	(card (player W)(suit ?)(name ?card-name))
 =>
+	(retract ?pc-fact)
+	(bind ?pts (+ ?pts (cardvalue ?card-name)))
+	(assert (points (player W)(pc ?pts)))
 	(bind ?*W-pc* (+ ?*W-pc* (cardvalue ?card-name)))
 	;(printout t ?*W-pc* crlf)
 )
+
+;(defrule calculate-spades
+; 	(card (player ?owner)(suit spades)(name ?))
+; 	?hand-fact <- (hand (player ?owner)(spades ?S)(hearts ?H)(diamonds ?D)(clubs ?C))
+;=>
+; 	(retract ?hand-fact)
+; 	(bind ?S (+ ?S 1))
+; 	(assert (hand (player ?owner)(spades ?S)(hearts ?H)(diamonds ?D)(clubs ?C)))
+;)
+; 
+;(defrule calculate-hearts
+; 	(card (player ?owner)(suit hearts)(name ?))
+; 	?hand-fact <- (hand (player ?owner)(spades ?S)(hearts ?H)(diamonds ?D)(clubs ?C))
+;=>
+; 	(retract ?hand-fact)
+; 	(bind ?S (+ ?S 1))
+; 	(assert (hand (player ?owner)(spades ?S)(hearts ?H)(diamonds ?D)(clubs ?C)))
+;)
+; 
+;(defrule calculate-diamonds
+; 	(card (player ?owner)(suit diamonds)(name ?))
+; 	?hand-fact <- (hand (player ?owner)(spades ?S)(hearts ?H)(diamonds ?D)(clubs ?C))
+;=>
+; 	(retract ?hand-fact)
+; 	(bind ?S (+ ?S 1))
+; 	(assert (hand (player ?owner)(spades ?S)(hearts ?H)(diamonds ?D)(clubs ?C)))
+;)
+; 
+;(defrule calculate-clubs
+; 	(card (player ?owner)(suit clubs)(name ?))
+; 	?hand-fact <- (hand (player ?owner)(spades ?S)(hearts ?H)(diamonds ?D)(clubs ?C))
+;=>
+; 	(retract ?hand-fact)
+; 	(bind ?S (+ ?S 1))
+; 	(assert (hand (player ?owner)(spades ?S)(hearts ?H)(diamonds ?D)(clubs ?C)))
+;)
 
 (defglobal ?*pass-count* = 0)
 (defglobal ?*bids-made* = 0)
@@ -312,8 +451,6 @@
 )
 
 
-(defglobal ?*ourplayer* = N)
-
 
 (defrule bidding-ourplayer-opened
 	?opening <- (bidding no-opening)
@@ -323,3 +460,12 @@
 	(assert (bidding-opening (player ?bid-player)(level ?bid-lvl)(suit ?bid-suit)))
 )
 
+
+(defrule bidding-open-one-major
+	(bidding no-opening)
+	?bid-player <- (player ?bidder)
+	(points (player N)(pc ?pts))
+	(test (>= ?pts 12))
+=>
+	(retract ?bid-player)
+)

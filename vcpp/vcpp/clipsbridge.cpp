@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include "clipsbridge.h"
 #include <iostream>
 #include <map>
@@ -160,7 +160,7 @@ std::string ClipsBridge::GetCardsDealtToPlayer(std::string player) {
 			cards[i][j]=99;
 		}
 	}
-
+	
 	GetFactList(&multifieldDO,NULL);
 	end=GetDOEnd(multifieldDO);
 	multifieldPtr=GetValue(multifieldDO);
