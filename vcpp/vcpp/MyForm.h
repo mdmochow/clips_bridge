@@ -28,12 +28,34 @@ namespace vcpp {
 		String ^bid;
 		int currentBidder;
 		int dealMark;
+	private: System::Windows::Forms::TextBox^  bidBoxN;
+
+	public: System::Windows::Forms::Label^  label6;
+	private: System::Windows::Forms::TextBox^  bidBoxE;
+	public: 
+
+	public: 
+	public: System::Windows::Forms::Label^  label7;
+	private: System::Windows::Forms::TextBox^  bidBoxS;
+	public: 
+	private: 
+
+	public: 
+	public: System::Windows::Forms::Label^  label8;
+	private: System::Windows::Forms::TextBox^  bidBoxW;
+	public: 
+	private: 
+
+	public: 
+	public: System::Windows::Forms::Label^  label9;
+	private: 
+	private: 
 	public: System::Windows::Forms::Label^  label5;
 	public:
 		MyForm(ClipsBridge *clipsMain)
 		{
 			InitializeComponent();
-			dealMark=-1;
+			dealMark=0;
 			currentBidder=0;
 			clips=clipsMain;
 			bid=gcnew String("");
@@ -107,7 +129,7 @@ namespace vcpp {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-	private: System::Windows::Forms::Button^  button1;
+
 
 
 #pragma region Windows Form Designer generated code
@@ -146,8 +168,15 @@ namespace vcpp {
 			this->pictureBox15 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox16 = (gcnew System::Windows::Forms::PictureBox());
 			this->tbxPlayerE = (gcnew System::Windows::Forms::TextBox());
-			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->bidBoxN = (gcnew System::Windows::Forms::TextBox());
+			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->bidBoxE = (gcnew System::Windows::Forms::TextBox());
+			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->bidBoxS = (gcnew System::Windows::Forms::TextBox());
+			this->label8 = (gcnew System::Windows::Forms::Label());
+			this->bidBoxW = (gcnew System::Windows::Forms::TextBox());
+			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
@@ -184,11 +213,11 @@ namespace vcpp {
 			// btnDisplay
 			// 
 			this->btnDisplay->AccessibleName = L"btnDisplay";
-			this->btnDisplay->Location = System::Drawing::Point(34, 40);
+			this->btnDisplay->Location = System::Drawing::Point(12, 30);
 			this->btnDisplay->Name = L"btnDisplay";
 			this->btnDisplay->Size = System::Drawing::Size(75, 23);
 			this->btnDisplay->TabIndex = 1;
-			this->btnDisplay->Text = L"Display";
+			this->btnDisplay->Text = L"Play";
 			this->btnDisplay->UseVisualStyleBackColor = true;
 			this->btnDisplay->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
@@ -445,33 +474,102 @@ namespace vcpp {
 			this->tbxPlayerE->TabIndex = 26;
 			this->tbxPlayerE->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
 			// 
-			// button1
-			// 
-			this->button1->Location = System::Drawing::Point(34, 70);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(75, 23);
-			this->button1->TabIndex = 32;
-			this->button1->Text = L"button1";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click_1);
-			// 
 			// label5
 			// 
 			this->label5->AutoSize = true;
-			this->label5->Location = System::Drawing::Point(156, 70);
+			this->label5->Location = System::Drawing::Point(683, 24);
 			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(35, 13);
+			this->label5->Size = System::Drawing::Size(100, 13);
 			this->label5->TabIndex = 34;
-			this->label5->Text = L"label5";
-			this->label5->TextChanged += gcnew System::EventHandler(this, &MyForm::label5_TextChanged);
+			this->label5->Text = L"DO_NOT_DELETE";
+			this->label5->Visible = false;
+			// 
+			// bidBoxN
+			// 
+			this->bidBoxN->Location = System::Drawing::Point(291, 202);
+			this->bidBoxN->Multiline = true;
+			this->bidBoxN->Name = L"bidBoxN";
+			this->bidBoxN->ReadOnly = true;
+			this->bidBoxN->Size = System::Drawing::Size(49, 215);
+			this->bidBoxN->TabIndex = 35;
+			// 
+			// label6
+			// 
+			this->label6->AutoSize = true;
+			this->label6->Location = System::Drawing::Point(288, 186);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(15, 13);
+			this->label6->TabIndex = 36;
+			this->label6->Text = L"N";
+			// 
+			// bidBoxE
+			// 
+			this->bidBoxE->Location = System::Drawing::Point(346, 202);
+			this->bidBoxE->Multiline = true;
+			this->bidBoxE->Name = L"bidBoxE";
+			this->bidBoxE->ReadOnly = true;
+			this->bidBoxE->Size = System::Drawing::Size(49, 215);
+			this->bidBoxE->TabIndex = 35;
+			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->Location = System::Drawing::Point(343, 186);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(14, 13);
+			this->label7->TabIndex = 36;
+			this->label7->Text = L"E";
+			// 
+			// bidBoxS
+			// 
+			this->bidBoxS->Location = System::Drawing::Point(401, 202);
+			this->bidBoxS->Multiline = true;
+			this->bidBoxS->Name = L"bidBoxS";
+			this->bidBoxS->ReadOnly = true;
+			this->bidBoxS->Size = System::Drawing::Size(49, 215);
+			this->bidBoxS->TabIndex = 35;
+			// 
+			// label8
+			// 
+			this->label8->AutoSize = true;
+			this->label8->Location = System::Drawing::Point(398, 186);
+			this->label8->Name = L"label8";
+			this->label8->Size = System::Drawing::Size(14, 13);
+			this->label8->TabIndex = 36;
+			this->label8->Text = L"S";
+			// 
+			// bidBoxW
+			// 
+			this->bidBoxW->Location = System::Drawing::Point(456, 202);
+			this->bidBoxW->Multiline = true;
+			this->bidBoxW->Name = L"bidBoxW";
+			this->bidBoxW->ReadOnly = true;
+			this->bidBoxW->Size = System::Drawing::Size(49, 215);
+			this->bidBoxW->TabIndex = 35;
+			// 
+			// label9
+			// 
+			this->label9->AutoSize = true;
+			this->label9->Location = System::Drawing::Point(453, 186);
+			this->label9->Name = L"label9";
+			this->label9->Size = System::Drawing::Size(18, 13);
+			this->label9->TabIndex = 36;
+			this->label9->Text = L"W";
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(794, 591);
+			this->Controls->Add(this->label9);
+			this->Controls->Add(this->label8);
+			this->Controls->Add(this->label7);
+			this->Controls->Add(this->label6);
+			this->Controls->Add(this->bidBoxW);
+			this->Controls->Add(this->bidBoxS);
+			this->Controls->Add(this->bidBoxE);
+			this->Controls->Add(this->bidBoxN);
 			this->Controls->Add(this->label5);
-			this->Controls->Add(this->button1);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->pictureBox13);
 			this->Controls->Add(this->pictureBox14);
@@ -531,9 +629,30 @@ private:
 		const char players[4]={'N','E','S','W'};
 		int i;
 		
+		Reset();
+		clips->ResetBidCounter();
+
+		bidBoxN->Clear();
+		bidBoxE->Clear();
+		bidBoxS->Clear();
+		bidBoxW->Clear();
 		if (++dealMark>3) {
 			dealMark=0;
 		}
+		currentBidder=dealMark-1;
+		if (currentBidder<0) {
+			currentBidder=3;
+		}
+		if (currentBidder>0) {
+			bidBoxN->Text+="\r\n";
+			if (currentBidder>1) {
+				bidBoxE->Text+="\r\n";
+				if (currentBidder>2) {
+					bidBoxS->Text+="\r\n";
+				}
+			}
+		}
+
 		clips->DealCardsToPlayers(players[dealMark]);
 		for (i=0;i<4;++i) {
 			cardsSorted=clips->GetCardsDealtToPlayer(playersStr[i]);
@@ -551,34 +670,56 @@ private:
 				tbxPlayerW->Text=StrVal;
 			}
 		}
+
+		if (players[currentBidder]==clips->ourPlayer) {
+			char buffer[15];
+			sprintf_s(buffer,"(player %c)",clips->ourPlayer);
+			AssertString(buffer);
+		}
+
 		while (clips->Bidding()) {
-			if (players[currentBidder]=='N') {
+			if (players[currentBidder]==clips->ourPlayer) {
+				Run(-1);
+				clips->IncrementBidCounter();
+				String^ StrVal=gcnew String(clips->FindLastBid().c_str());
+				bidBoxN->Text+=StrVal;
+				bidBoxN->Text+="\r\n";
 				if (++currentBidder>3) {
 					currentBidder=0;
 				}
 			}
 			else {
 				DialogBox ^wnd = gcnew DialogBox(label5);
-				//wnd->AcceptButton( <- Submit enterem
+				
 				wnd->ShowDialog();
+				String^ StrVal=gcnew String(label5->Text);
+				if (currentBidder==0) {
+					bidBoxN->Text+=StrVal;
+					bidBoxN->Text+="\r\n";
+				}
+				else if (currentBidder==1) {
+					bidBoxE->Text+=StrVal;
+					bidBoxE->Text+="\r\n";
+				}
+				else if (currentBidder==2) {
+					bidBoxS->Text+=StrVal;
+					bidBoxS->Text+="\r\n";
+				}
+				else {
+					bidBoxW->Text+=StrVal;
+					bidBoxW->Text+="\r\n";
+				}
 				bid=label5->Text;
 				const char* charBid=(const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bid)).ToPointer();
-				std::cout << "bid: " << charBid << std::endl;
+				//std::cout << "bid: " << charBid << std::endl;
 				clips->PlayerBids(charBid, players[currentBidder]);
 				if (++currentBidder>3) {
 					currentBidder=0;
 				}
 				System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
-				clips->PrintFacts();
+				//clips->PrintFacts();
 			}
 		}
 	} // button1_Click
-private:
-	System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e) {
-	}
-private:
-	System::Void label5_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-		const char players[4]={'N','E','S','W'};
-	}
 };
 }

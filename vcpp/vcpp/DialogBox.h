@@ -21,6 +21,7 @@ namespace vcpp {
 			InitializeComponent();
 			bid=gcnew String("PASS");
 			_lab=lab;
+			AcceptButton=button1;
 			//
 			//TODO: Add the constructor code here
 			//
@@ -205,22 +206,22 @@ namespace vcpp {
 			// radioButton37
 			// 
 			this->radioButton37->AutoSize = true;
-			this->radioButton37->Location = System::Drawing::Point(90, 173);
+			this->radioButton37->Location = System::Drawing::Point(117, 173);
 			this->radioButton37->Name = L"radioButton37";
-			this->radioButton37->Size = System::Drawing::Size(69, 17);
+			this->radioButton37->Size = System::Drawing::Size(32, 17);
 			this->radioButton37->TabIndex = 0;
-			this->radioButton37->Text = L"DOUBLE";
+			this->radioButton37->Text = L"X";
 			this->radioButton37->UseVisualStyleBackColor = true;
 			this->radioButton37->CheckedChanged += gcnew System::EventHandler(this, &DialogBox::radioButton37_CheckedChanged);
 			// 
 			// radioButton38
 			// 
 			this->radioButton38->AutoSize = true;
-			this->radioButton38->Location = System::Drawing::Point(184, 173);
+			this->radioButton38->Location = System::Drawing::Point(170, 173);
 			this->radioButton38->Name = L"radioButton38";
-			this->radioButton38->Size = System::Drawing::Size(84, 17);
+			this->radioButton38->Size = System::Drawing::Size(39, 17);
 			this->radioButton38->TabIndex = 0;
-			this->radioButton38->Text = L"REDOUBLE";
+			this->radioButton38->Text = L"XX";
 			this->radioButton38->UseVisualStyleBackColor = true;
 			this->radioButton38->CheckedChanged += gcnew System::EventHandler(this, &DialogBox::radioButton38_CheckedChanged);
 			// 
@@ -684,9 +685,9 @@ private: System::Void radioButton35_CheckedChanged(System::Object^  sender, Syst
 private: System::Void radioButton36_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
 		 bid="PASS";}
 private: System::Void radioButton37_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
-		 bid="DOUBLE";}
+		 bid="X";}
 private: System::Void radioButton38_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
-		 bid="REDOUBLE";}
+		 bid="XX";}
 private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 		_lab->Text=bid;
 		this->Close();

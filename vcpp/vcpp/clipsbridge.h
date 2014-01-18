@@ -17,6 +17,7 @@ class ClipsBridge {
 public:
 	void *theEnv;
 	std::string bid;
+	char ourPlayer;
 
 	ClipsBridge();
 	~ClipsBridge();
@@ -25,6 +26,10 @@ public:
 	std::string ClipsBridge::GetCardsDealtToPlayer(std::string player);
 	void ClipsBridge::PlayerBids(std::string bid, char player);
 	bool ClipsBridge::Bidding(void);
+	void ClipsBridge::IncrementBidCounter(void);
+	int ClipsBridge::GetBidCounter(void);
+	void ClipsBridge::ResetBidCounter(void);
+	std::string ClipsBridge::FindLastBid(void);
 
 private:
 	char buffer[BUFFER_SIZE];
@@ -32,11 +37,12 @@ private:
 	void *multifieldPtr;
 	FILE *fp;
 	int bidCounter;
-	long tmp, bidCnt, zero;
 
 	int ClipsBridge::GetCardNumber(std::string arg);
 	std::string ClipsBridge::SortCards(int cards[4][14]);
 	char ClipsBridge::NextPlayer(char player);
+	char ClipsBridge::PreviousPlayer(char player);
+	std::string ClipsBridge::ReadPlayerBid(std::stringstream &sStrm);
 };
 
 #endif

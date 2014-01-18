@@ -14,7 +14,7 @@ void SwapIOB(FILE *A, FILE *B) {
 
 
 
-ClipsBridge::ClipsBridge(): bidCounter(0), zero(0) {
+ClipsBridge::ClipsBridge(): bidCounter(0), ourPlayer('N') {
 	fp=fopen("clips_bridge.log","w");
 	SwapIOB(stdout,fp);
 
@@ -226,90 +226,158 @@ char ClipsBridge::NextPlayer(char player) {
 
 
 
+char ClipsBridge::PreviousPlayer(char player) {
+	const char players[5]={'W','N','E','S','W'};
+	int i;
+	for (i=1;i<5;++i) {
+		if (players[i]==player) {
+			break;
+		}
+	}
+	return players[i-1];
+}
+
+
+
+
 void ClipsBridge::PlayerBids(std::string bid, char player) {
-	bidCnt=++bidCounter;
 	int level;
 	std::stringstream sStrm;
 	char suit[3];
-	DATA_OBJECT newGlobal;
+	DATA_OBJECT tempDO;
+
+	IncrementBidCounter();
 	
-	GetDefglobalValue("bids-made",&newGlobal);
-	SetValue(newGlobal,&bidCnt);
-	SetDefglobalValue("bids-made",&newGlobal);
-	
-	GetDefglobalValue("pass-count",&newGlobal);
-	
-	
+	Eval("(bind ?*bids-made* (+ ?*bids-made* 1))",&tempDO);
 
 	if (bid=="PASS") {
 		sprintf_s(buffer,"(bid (number %d)(player %c)(type pass)(level 0)(suit empty))",bidCounter,player);
-		std::cout << "OLDGLOBLE: ";
-		ShowDefglobals("stdout",NULL);
-		tmp=*(static_cast<long *>(GetValue(newGlobal)))+1;
-		SetValue(newGlobal,&tmp);
-		SetDefglobalValue("pass-count",&newGlobal);
+		Eval("(bind ?*pass-count* (+ ?*pass-count* 1))",&tempDO);
 	}
-	else if (bid=="DOUBLE") {
+	else if (bid=="X") {
 		sprintf_s(buffer,"(bid (number %d)(player %c)(type double)(level 0)(suit empty))",bidCounter,player);
-		SetValue(newGlobal,&zero);
-		SetDefglobalValue("pass-count",&newGlobal);
+		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
-	else if (bid=="REDOUBLE") {
+	else if (bid=="XX") {
 		sprintf_s(buffer,"(bid (number %d)(player %c)(type redouble)(level 0)(suit empty))",bidCounter,player);
-		SetValue(newGlobal,&zero);
-		SetDefglobalValue("pass-count",&newGlobal);
+		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
 	else {
 		sStrm << bid;
 		sStrm >> level;
 		sStrm >> suit;
-		std::cout << "SUIT: " << suit << std::endl;
 		sprintf_s(buffer,"(bid (number %d)(player %c)(type normal)(level %d)(suit %s))",bidCounter,player,level,suit);
-		SetDefglobalValue("pass-count",&newGlobal);
+		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
 	AssertString(buffer);
-	//sprintf_s(buffer,"(player %c)",NextPlayer(player));
-	//AssertString(buffer);
-	//delete newGlobal.value;
+	if (NextPlayer(player)==ourPlayer) {
+		sprintf_s(buffer,"(player %c)",NextPlayer(player));
+		AssertString(buffer);
+	}
 }
    
 
 
 
 bool ClipsBridge::Bidding(void) {
-	std::string temp;
+	DATA_OBJECT rtn;
+
+	FunctionCall("end-of-bidding","",&rtn);
+	if (DOToInteger(rtn)) {
+		return false;
+	}
+	return true;
+}
+
+
+
+
+void ClipsBridge::IncrementBidCounter(void) {
+	bidCounter++;
+}
+
+
+
+
+int ClipsBridge::GetBidCounter(void) {
+	return bidCounter;
+}
+
+
+
+
+void ClipsBridge::ResetBidCounter(void) {
+	bidCounter=0;
+}
+
+
+
+
+std::string ClipsBridge::FindLastBid(void) {
+	std::string temp, bidNr, ourPlayerStr(1,ourPlayer);
 	std::stringstream sStrm;
 	int i, end;
 
-	Run(-1);
+	bidNr=std::to_string(bidCounter);
+	bidNr+=")";
+	ourPlayerStr+=")";
 
 	GetFactList(&multifieldDO,NULL);
 	end=GetDOEnd(multifieldDO);
 	multifieldPtr=GetValue(multifieldDO);
 	for (i=GetDOBegin(multifieldDO);i<=end;i++) {
 		GetFactPPForm(buffer,BUFFER_SIZE,(fact *)GetMFValue(multifieldPtr,i));
+		//std::cout << buffer << std::endl;
 		sStrm << buffer;
 		sStrm >> temp; // fact number
-		sStrm >> temp; // "(state"
-		if (temp=="(state") {
-			sStrm >> temp; // "bidding-finished)"
-			if (temp=="bidding-finished)") {
-				return false;
-			}
+		sStrm >> temp; // "(bid"
+		if (temp=="(bid") {
+			sStrm >> temp; // "(number"
+			sStrm >> temp; // "%d)"
+			if (temp==bidNr) {
+				sStrm >> temp; // "(player"
+				sStrm >> temp; // player who made the bid
+				if (temp==ourPlayerStr) {
+					return ReadPlayerBid(sStrm);
+				}
+				
+			} // temp==player
 		} // temp=="(card"
 		while (!sStrm.eof()) {
 			sStrm >> temp;
 		}
 		sStrm.clear();
 	}
-	return true;
+	return "BNF";
 }
 
-	
-		//PPFact((fact *)GetMFValue(multifieldPtr,i),"stdout",0);
 
-		//PrintAtom(theEnv,"stdout",GetMFType(multifieldPtr,i),(GetMFValue(multifieldPtr,i)));
-		//PrintFactWithIdentifier(theEnv,"stdout",(fact *)GetMFValue(multifieldPtr,i));
 
-	//if ((GetMFType(multifieldPtr,i) == STRING) || (GetMFType(multifieldPtr,i) == SYMBOL))
-	//tempPtr = ValueToString(GetMFValue(multifieldPtr,i));
+
+
+std::string ClipsBridge::ReadPlayerBid(std::stringstream &sStrm) {
+	std::string temp;
+	std::string number, player, type, level, suit;
+	sStrm >> temp; // "(type
+	sStrm >> type; // card nr
+	if(type == "normal)"){
+		sStrm >> temp; // (level
+		sStrm >> level;
+		sStrm >> temp; // (suit
+		sStrm >> suit;
+		if(suit == "NT))")
+			return std::string(1, level.at(0)) + " NT";
+		return std::string(1, level.at(0)) + std::string(1, suit.at(0));
+	}
+	if(type == "pass)") {
+		DATA_OBJECT tempDO;
+		Eval("(bind ?*pass-count* (+ ?*pass-count* 1))",&tempDO);
+		return "PASS";
+	}
+	if(type == "double)")
+		return "X";
+	if(type == "redouble)")
+		return "XX";
+	return "WB";
+	//(bid (number %d)(player %c)(type normal)(level %d)(suit %s))
+}
