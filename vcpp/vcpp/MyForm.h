@@ -647,9 +647,9 @@ private:
 			}
 		}
 
-		char buffer[80];
-		sprintf_s(buffer,"(bid (number 0)(player empty)(type empty)(level 0)(suit empty))");
-		AssertString(buffer);
+		AssertString("(bid (number 0)(player empty)(type empty)(level 0)(suit empty))");
+
+		Run(-1);
 	}
 
 
@@ -690,12 +690,18 @@ private:
 			char buffer[15];
 			sprintf_s(buffer,"(player %c)",clips->ourPlayer);
 			AssertString(buffer);
+			R
 		}*/
+		ShowDefglobals("stdout",NULL);
 		clips->PrintFacts();
 
 		while (clips->Bidding()) {
 			if (players[currentBidder]==clips->ourPlayer) {
+				AssertString("(bidding our-player-should-bid)");
+				clips->RetractFactByName("(bidding made-a-bid)");
 				Run(-1);
+		ShowDefglobals("stdout",NULL);
+		clips->PrintFacts();
 				clips->IncrementBidCounter();
 				String^ StrVal=gcnew String(clips->FindLastBid().c_str());
 				bidBoxN->Text+=StrVal;
@@ -736,8 +742,8 @@ private:
 				//clips->PrintFacts();
 			} // else
 		} // while (clips->Bidding())
-		clips->PrintFacts();
 		ShowDefglobals("stdout",NULL);
+		clips->PrintFacts();
 	} // button1_Click
 };
 

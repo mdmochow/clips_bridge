@@ -53,7 +53,7 @@
 	(card (suit ?)(name ?card-name))
 =>
 	(bind ?*pc* (+ ?*pc* (cardvalue ?card-name)))
-	(printout t ?*pc* crlf)
+	;(printout t ?*pc* crlf)
 )
 
 
@@ -61,7 +61,7 @@
 	(card (suit spades)(name ?))
 =>
 	(bind ?*spades* (+ ?*spades* 1))
-	(printout t ?*spades* crlf)
+	;(printout t ?*spades* crlf)
 )
 
 
@@ -69,7 +69,7 @@
 	(card (suit hearts)(name ?))
 =>
 	(bind ?*hearts* (+ ?*hearts* 1))
-	(printout t ?*hearts* crlf)
+	;(printout t ?*hearts* crlf)
 )
 
 
@@ -77,7 +77,7 @@
 	(card (suit diamonds)(name ?))
 =>
 	(bind ?*diamonds* (+ ?*diamonds* 1))
-	(printout t ?*diamonds* crlf)
+	;(printout t ?*diamonds* crlf)
 )
 
 
@@ -85,12 +85,13 @@
 	(card (suit clubs)(name ?))
 =>
 	(bind ?*clubs* (+ ?*clubs* 1))
-	(printout t ?*clubs* crlf)
+	;(printout t ?*clubs* crlf)
 )
 
 
 (defglobal ?*pass-count* = 0)
 (defglobal ?*bids-made* = 0)
+(defglobal ?*ourplayer* = N)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -99,27 +100,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-(defrule made-a-bid
-	?bidfact <- (state bid-made)
-=>
-	(retract ?bidfact)
-)
-
-(defrule bid-pass
-	;(made-a-bid)
-	;(not(state bid-made))
-	;?bid-player <- (state N-should-bid)
-	?bid-player <- (player ?bidder)
-	(bid (number ?bid-nr)(player ?)(type ?)(level ?bid-lvl)(suit ?bid-suit))
-	(test (= ?*bids-made* ?bid-nr))
-=>
-	(retract ?bid-player)
-	;(assert (state E-should-bid))
-	;(assert (state bid-made))
-	(bind ?*bids-made* (+ ?*bids-made* 1))
-	(assert (bid (number ?*bids-made*)(player ?bidder)(type pass)(level 0)(suit empty)))
-)
 
 (deffunction end-of-bidding ()
 	(if (and (> ?*pass-count* 2)(> ?*bids-made* 3))
@@ -150,7 +130,7 @@
 
 
 
-(defrule bidding-ourplayer-opened
+(defrule bidding-find-opening
 	?opening <- (bidding no-opening)
 	(bid (number ?)(player ?bid-player)(type normal)(level ?bid-lvl)(suit ?bid-suit))
 =>
@@ -158,12 +138,72 @@
 	(assert (bidding-opening (player ?bid-player)(level ?bid-lvl)(suit ?bid-suit)))
 )
 
+(deffunction get-five-in-major-suit()
+	(if (> ?*spades* 4)
+	    then
+		spades
+	    else
+		(if (> ?*hearts* 4)
+	    	    then
+			hearts
+		)
+	)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defrule bidding-open-one-major
-	(bidding no-opening)
-	?bid-player <- (player ?bidder)
-	(points (player N)(pc ?pts))
-	(test (>= ?pts 12))
+	?bidfact <- (bidding our-player-should-bid)
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?bid-lvl)(suit ?bid-suit))
+	(test (= ?*bids-made* ?bid-nr))
+	?opening <- (bidding no-opening)
+	(test (>= ?*pc* 12))
+	(or (test (> ?*spades* 4)) (test (> ?*hearts* 4)))
 =>
-	(retract ?bid-player)
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 1)(suit (get-five-in-major-suit))))
+	(assert (bidding made-a-bid))
+	(retract ?opening)
+	(assert (bidding-opening (player ?*ourplayer*)(level 1)(suit (get-five-in-major-suit))))
 )
+
+
+(defrule assert-fact-leading-to-pass
+	(not (bidding made-a-bid))
+	(not (bidding that-fact-leads-to-pass))
+=>
+	(assert (bidding that-fact-leads-to-pass))
+)
+
+(defrule retract-fact-leading-to-pass
+	(bidding made-a-bid)
+	?passfact <- (bidding that-fact-leads-to-pass)
+=>
+	(retract ?passfact)
+)
+
+(defrule no-choice-but-to-pass
+	(not (bidding made-a-bid))
+	(not (bidding must-pass))
+	(bidding that-fact-leads-to-pass)
+=>
+	(assert (bidding must-pass))
+)
+
+
+(defrule bid-pass
+	?bidfact <- (bidding our-player-should-bid)
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?bid-lvl)(suit ?bid-suit))
+	(test (= ?*bids-made* ?bid-nr))
+	?must-pass-fact <- (bidding must-pass)
+	?passfact2 <- (bidding that-fact-leads-to-pass)
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type pass)(level 0)(suit empty)))
+	(retract ?must-pass-fact)
+	(retract ?passfact2)
+	(assert (bidding made-a-bid))
+)
+

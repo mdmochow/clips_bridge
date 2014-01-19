@@ -1,6 +1,7 @@
 ﻿#include <stdio.h>
 #include "clipsbridge.h"
 #include <iostream>
+#include <boost/algorithm/string.hpp>
 
 #pragma warning(disable: 4996)
 
@@ -264,10 +265,9 @@ void ClipsBridge::PlayerBids(std::string bid, char player) {
 		Eval("(bind ?*pass-count* 0)",&tempDO);		
 	}
 	AssertString(buffer);
-	if (NextPlayer(player)==ourPlayer) {
-		sprintf_s(buffer,"(player %c)",NextPlayer(player));
-		AssertString(buffer);
-	}
+	//if (NextPlayer(player)==ourPlayer) {
+	//	AssertString("(bidding our-player-should-bid)");
+	//}
 }
    
 
@@ -361,7 +361,7 @@ std::string ClipsBridge::ReadPlayerBid(std::stringstream &sStrm) {
 		sStrm >> suit;
 		if(suit == "NT))")
 			return std::string(1, level.at(0)) + " NT";
-		return std::string(1, level.at(0)) + std::string(1, suit.at(0));
+		return std::string(1, level.at(0)) + " " + boost::to_upper_copy(std::string(1, suit.at(0)));
 	}
 	if(type == "pass)") {
 		DATA_OBJECT tempDO;
@@ -374,4 +374,40 @@ std::string ClipsBridge::ReadPlayerBid(std::stringstream &sStrm) {
 		return "XX";
 	return "WB";
 	//(bid (number %d)(player %c)(type normal)(level %d)(suit %s))
+}
+
+
+
+
+void ClipsBridge::RetractFactByName(std::string factStr) {
+	std::string tempClips, tempCpp;
+	bool factFound=false;
+	int i, end;
+
+	GetFactList(&multifieldDO,NULL);
+	end=GetDOEnd(multifieldDO);
+	multifieldPtr=GetValue(multifieldDO);
+	for (i=GetDOBegin(multifieldDO);i<=end;i++) {
+		std::stringstream sStrmClips, sStrmCpp;
+		GetFactPPForm(buffer,BUFFER_SIZE,(fact *)GetMFValue(multifieldPtr,i));
+		sStrmClips << buffer;
+		sStrmClips >> tempClips; // fact nr
+		sStrmCpp << factStr;
+		while (!sStrmClips.eof()) {
+			sStrmClips >> tempClips;
+			sStrmCpp >> tempCpp;
+			//std::cout << "comparing: " << tempClips << ", " << tempCpp << std::endl;
+			if (tempClips!=tempCpp) {
+				//std::cout << "That's not it." << std::endl;
+				factFound=false;
+				break;
+			}
+			factFound=true;
+		}
+		if (factFound) {
+			//std::cout << "Fount it!" << std::endl;
+			Retract((fact *)GetMFValue(multifieldPtr,i));
+			break;
+		}
+	}	
 }

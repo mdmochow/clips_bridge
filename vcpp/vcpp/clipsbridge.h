@@ -28,6 +28,7 @@ public:
 	void ClipsBridge::IncrementBidCounter(void);
 	int ClipsBridge::GetBidCounter(void);
 	void ClipsBridge::ResetBidCounter(void);
+	void ClipsBridge::RetractFactByName(std::string factStr);
 
 
 	void ClipsBridge::DealCardsToPlayers(char player);
