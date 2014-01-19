@@ -14,6 +14,7 @@ std::map<eCard, std::string> mCard2clp = boost::assign::map_list_of (two, "two")
 								(six, "six") (seven, "seven") (eight, "eight") (nine, "nine")
 								(ten, "ten") (jack, "jack") (queen, "queen") (king, "king") (ace, "ace");
 
+		std::map<std::string, ePlayer> mPlayer = boost::assign::map_list_of ("N", N) ("E", E) ("S", S) ("W", W);
 };
 
 namespace vcpp {
@@ -688,11 +689,12 @@ private:
 
 	void AssertCards(void) {
 		char buffer[80];
-		eCard **pCards=clips->cards->GetCards(static_cast<ePlayer>(clips->ourPlayer));
+		eCard **pCards=clips->cards->GetCards(static_cast<ePlayer>(0)); // TODO: ourplayer
 		for (int i=0;i<4;++i) {
 			for (int j=0;j<14;++j) {
 				if (pCards[i][j]!=empty) {
-					sprintf_s(buffer,"(card (suit %s)(name %s)",mCard2clp[pCards[i][j]],mSuit2clp[static_cast<eSuit>(i)]);
+					sprintf_s(buffer,"(card (suit %s)(name %s))",mSuit2clp[spades],mCard2clp[two]);//mSuit2clp[static_cast<eSuit>(i)]);
+					std::cout<<buffer<<::std::endl;
 					AssertString(buffer);
 				}
 				else {
@@ -713,7 +715,7 @@ private:
 
 		DisplayCards();
 
-		//AssertCards();
+		AssertCards();
 
 		/*if (players[currentBidder]==clips->ourPlayer) {
 			char buffer[15];
