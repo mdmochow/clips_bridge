@@ -673,7 +673,24 @@ private:
 			}
 		}
 	}
+	
 
+
+	void AssertCards(void) {
+		for (int player=0;player<4;++player) {
+			eCard **pCards=clips->cards->GetCards(static_cast<ePlayer>(player));
+			for (int i=0;i<4;++i) {
+				for (int j=0;j<14;++j) {
+					if (pCards[i][j]!=empty) {
+
+					}
+					else {
+						break;
+					}
+				}
+			}
+		}
+	}
 
 
 	System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -685,6 +702,8 @@ private:
 		clips->cards->ReadCardsFromFile("table.txt");
 
 		DisplayCards();
+
+		AssertCards();
 
 		/*if (players[currentBidder]==clips->ourPlayer) {
 			char buffer[15];
