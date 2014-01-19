@@ -1,6 +1,7 @@
-#include "cardsontable.h"
 #include <string>
-
+#include <map>
+#include <boost\assign.hpp>
+#include "cardsontable.h"
 
 std::map<std::string, ePlayer> mPlayer = boost::assign::map_list_of ("N", N) ("E", E) ("S", S) ("W", W);
 std::map<std::string, eCard> mCard = boost::assign::map_list_of ("2", two) ("3", three) ("4", four) ("5", five) 
@@ -8,11 +9,8 @@ std::map<std::string, eCard> mCard = boost::assign::map_list_of ("2", two) ("3",
 																("10", ten) ("J", jack) ("Q", queen) ("K", king) ("A", ace);
 std::map<std::string, eSuit> mSuit = boost::assign::map_list_of ("S", spades) ("H", hearts) ("D", diamonds) ("C", clubs);
 
-std::map<ePlayer, std::string> mPlayer2clp = boost::assign::map_list_of (N, "N") (E, "E") (S, "S") (W, "W");
-std::map<eSuit, std::string> mSuit2clp = boost::assign::map_list_of (spades, "spades") (hearts, "spades") (diamonds, "spades") (clubs, "clubs");
-std::map<eCard, std::string> mCard2clp = boost::assign::map_list_of (two, "two") (three, "three") (four, "four") (five, "five") 
-								(six, "six") (seven, "seven") (eight, "eight") (nine, "nine")
-								(ten, "ten") (jack, "jack") (queen, "queen") (king, "king") (ace, "ace");
+
+class CardsOnTable;
 
 CardsOnTable::CardsOnTable() {
 	cards=new eCard**[4];

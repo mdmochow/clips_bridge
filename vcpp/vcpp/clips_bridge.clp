@@ -13,21 +13,21 @@
 )
 
 
-(deffacts our-card-set
-	(card (suit spades)(name seven))
-	(card (suit spades)(name nine)) 
-	(card (suit spades)(name ten)) 
-	(card (suit hearts)(name three)) 
-	(card (suit hearts)(name five)) 
-	(card (suit hearts)(name ten))
-	(card (suit hearts)(name queen))
-	(card (suit hearts)(name king))
-	(card (suit diamonds)(name two))
-	(card (suit diamonds)(name ace))
-	(card (suit clubs)(name three))
-	(card (suit clubs)(name jack))
-	(card (suit clubs)(name king))
-)
+;(deffacts our-card-set
+; 	(card (suit spades)(name seven))
+; 	(card (suit spades)(name nine)) 
+; 	(card (suit spades)(name ten)) 
+; 	(card (suit hearts)(name three)) 
+; 	(card (suit hearts)(name five)) 
+; 	(card (suit hearts)(name ten))
+; 	(card (suit hearts)(name queen))
+; 	(card (suit hearts)(name king))
+; 	(card (suit diamonds)(name two))
+; 	(card (suit diamonds)(name ace))
+; 	(card (suit clubs)(name three))
+; 	(card (suit clubs)(name jack))
+; 	(card (suit clubs)(name king))
+;)
 
 
 (deffunction cardvalue(?card-name)
@@ -122,18 +122,18 @@
 
 (defrule bidding-find-forcing-opening
 	?opening <- (bidding no-opening)
-	(bid (number ?)(player ?bid-player)(type normal)(level ?bid-lvl)(suit ?bid-suit))
-	(and (test (= ?bid-lvl 2)) (test (= ?bid-suit clubs)))
+	(bid (number ?)(player ?bid-player)(type normal)(level 2)(suit clubs))
 =>
 	(retract ?opening)
-	(assert (bidding-opening (player ?bid-player)(level ?bid-lvl)(suit ?bid-suit)(forcing yes)))
+	(assert (bidding-opening (player ?bid-player)(level 2)(suit clubs)(forcing yes)))
 )
 
 
 (defrule bidding-find-opening
 	?opening <- (bidding no-opening)
+	(not (bid (number ?)(player ?bid-player)(type normal)(level 2)(suit clubs)))
 	(bid (number ?)(player ?bid-player)(type normal)(level ?bid-lvl)(suit ?bid-suit))
-	(not (and (test (= ?bid-lvl 2)) (test (= ?bid-suit clubs))))
+	(not (test (= ?bid-lvl 2)))
 =>
 	(retract ?opening)
 	(assert (bidding-opening (player ?bid-player)(level ?bid-lvl)(suit ?bid-suit)(forcing no)))
@@ -525,32 +525,157 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; responses(12+ pc)
+; responses to openings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrule respond-to-forcing-opening
+(deffunction return-cards-in-colour(?bid-suit)
+	(if (= ?bid-suit spades)
+	       then
+			?*spades*
+		else
+	 	 	(if (= ?bid-suit hearts)
+	 	 	       then
+	 	 			?*hearts*
+	 	 		else
+				 	(if (= ?bid-suit diamonds)
+				 	       then
+				 			?*diamonds*
+				 		else
+				 			?*clubs*
+					)
+			)
+	)
+)
+
+
+(deffunction return-bid-level(?bid-suit, ?new-bid)
+	(if (= ?bid-suit spades)
+	       then
+			2
+		else
+	 	 	(if (= ?bid-suit hearts)
+	 	 	       then
+	 	 			(if (= ?new-bid spades)
+					       then
+							1
+						else
+							2
+					)
+	 	 		else
+				 	(if (= ?bid-suit diamonds)
+				 	       then
+				 			(if (or (= ?new-bid spades) (= ?new-bid hearts))
+							    	then
+									1
+								else
+									2
+							)
+						else
+							(if (= ?new-bid clubs)
+							    	then
+									2
+								else
+									1
+							)
+					)
+			)
+	)
+)
+
+
+(deffunction get-longest-suit()
+	(if (and (>= ?*spades* ?*hearts*)(>= ?*spades* ?*diamonds*)(>= ?*spades* ?*clubs*))
+	        then
+			spades
+		else
+			(if (and (>= ?*hearts* ?*diamonds*)(>= ?*hearts* ?*clubs*))
+			    	 then
+					hearts
+				else
+					(if (and (>= ?*diamonds* ?*clubs*))
+					    	 then
+							diamonds
+						else
+							clubs
+					)
+			)
+	)
+)
+
+
+(defrule respond-to-opening-1-in-same-colour
 	?bidfact <- (bidding our-player-should-bid)
-	(not (bidding no-opening))
-	(test (<= ?*pc* 4))
-	(bidding-opening (player ?bid-player)(level 2)(suit clubs)(forcing yes))
+	(test (>= ?*pc* 6))
+	(test (<= ?*pc* 10))
+	(bidding-opening (player ?*partner*)(level 1)(suit ?bid-suit)(forcing ?))
+	(not (test (= ?bid-suit NT)))
+	(test (return-cards-in-colour ?bid-suit) 3)
+	(test (check-if-less-than-in-suits 4))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit ?bid-suit)))
+)
+
+
+(defrule respond-to-opening-1-in-new-suit
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 6))
+	(test (<= ?*pc* 10))
+	(bidding-opening (player ?*partner*)(level 1)(suit ?bid-suit)(forcing ?))
+	(not (test (= ?bid-suit NT)))
+	(test (not (check-if-less-than-in-suits 4)))
+	(test (= (return-bid-level ?bid-suit (get-longest-suit)) 1))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level (return-bid-level ?bid-suit (get-longest-suit)))(suit (get-longest-suit))))
+)
+
+
+(defrule respond-to-opening-1-in-new-suit-1NT
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 6))
+	(test (<= ?*pc* 10))
+	(bidding-opening (player ?*partner*)(level 1)(suit ?bid-suit)(forcing ?))
+	(not (test (= ?bid-suit NT)))
+	(test (not (check-if-less-than-in-suits 4)))
+	(test (> (return-bid-level ?bid-suit (get-longest-suit)) 1))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 1)(suit NT)))
+)
+
+
+(defrule respond-to-forcing-opening-with-pass
+	?bidfact <- (bidding our-player-should-bid)
+	(test (<= ?*pc* 7))
+	(bidding-opening (player ?*partner*)(level 2)(suit clubs)(forcing yes))
 =>
 	(retract ?bidfact)
 	(bind ?*bids-made* (+ ?*bids-made* 1))
 	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit diamonds)))
-	(retract ?opening)
 )
 
 
-(defrule respond-to-opening
+;(defrule respond-to-forcing-opening
+; 	?bidfact <- (bidding our-player-should-bid)
+; 	(test (>= ?*pc* 8))
+; 	(bidding-opening (player ?*partner*)(level 2)(suit clubs)(forcing yes))
+;=>
+; 	(retract ?bidfact)
+; 	(bind ?*bids-made* (+ ?*bids-made* 1))
+; 	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit diamonds)))
+;)
+
+
+(defrule pass-in-response
+	(declare (salience -1000))
 	?bidfact <- (bidding our-player-should-bid)
-	(not (bidding no-opening))
-	(test (>= ?*pc* 5))
-	(bidding-opening (player ?bid-player)(level 2)(suit clubs)(forcing yes))
+	(bidding-opening (player ?*partner*)(level ?)(suit ?)(forcing no))
 =>
 	(retract ?bidfact)
 	(bind ?*bids-made* (+ ?*bids-made* 1))
-	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit diamonds)))
-	(retract ?opening)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type pass)(level 0)(suit empty)))
 )
-
-
