@@ -5,17 +5,13 @@
 #include <iostream>
 #include "stringconversion.h"
 #include "cardsontable.h"
-#include <boost\assign.hpp>
 
-namespace {
-std::map<ePlayer, std::string> mPlayer2clp = boost::assign::map_list_of (N, "N") (E, "E") (S, "S") (W, "W");
-std::map<eSuit, std::string> mSuit2clp = boost::assign::map_list_of (spades, "spades") (hearts, "hearts") (diamonds, "diamonds") (clubs, "clubs");
-std::map<eCard, std::string> mCard2clp = boost::assign::map_list_of (two, "two") (three, "three") (four, "four") (five, "five") 
-								(six, "six") (seven, "seven") (eight, "eight") (nine, "nine")
-								(ten, "ten") (jack, "jack") (queen, "queen") (king, "king") (ace, "ace");
-
-		std::map<std::string, ePlayer> mPlayer = boost::assign::map_list_of ("N", N) ("E", E) ("S", S) ("W", W);
-};
+extern std::map<ePlayer, std::string> mPlayer2clp;
+extern std::map<eSuit, std::string> mSuit2clp;
+extern std::map<eCard, std::string> mCard2clp;
+extern std::map<std::string, ePlayer> mPlayer;
+extern std::map<std::string, eCard> mCard;
+extern std::map<std::string, eSuit> mSuit;
 
 namespace vcpp {
 
@@ -35,8 +31,8 @@ namespace vcpp {
 		System::ComponentModel::Container ^components;
 		ClipsBridge *clips;
 		String ^bid;
-		int currentBidder;
-		int dealMark;
+		ePlayer currentBidder;
+		ePlayer dealMark;
 	private: System::Windows::Forms::TextBox^  bidBoxN;
 
 	public: System::Windows::Forms::Label^  label6;
@@ -57,6 +53,8 @@ namespace vcpp {
 
 	public: 
 	public: System::Windows::Forms::Label^  label9;
+	private: System::Windows::Forms::TextBox^  textBox1;
+	public: 
 	private: 
 	private: 
 	public: System::Windows::Forms::Label^  label5;
@@ -64,8 +62,8 @@ namespace vcpp {
 		MyForm(ClipsBridge *clipsMain)
 		{
 			InitializeComponent();
-			dealMark=0;
-			currentBidder=0;
+			dealMark=N;
+			currentBidder=N;
 			clips=clipsMain;
 			bid=gcnew String("");
 			label5->Text=bid;
@@ -186,6 +184,7 @@ namespace vcpp {
 			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->bidBoxW = (gcnew System::Windows::Forms::TextBox());
 			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
@@ -565,11 +564,19 @@ namespace vcpp {
 			this->label9->TabIndex = 36;
 			this->label9->Text = L"W";
 			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(114, 100);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(100, 20);
+			this->textBox1->TabIndex = 37;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(794, 591);
+			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->label8);
 			this->Controls->Add(this->label7);
@@ -633,149 +640,11 @@ namespace vcpp {
 #pragma endregion
 private: 
 
-	void InitGame(void) {
-		clips->cards->ResetCards();
-		Reset();
-		clips->ResetBidCounter();
-		bidBoxN->Clear();
-		bidBoxE->Clear();
-		bidBoxS->Clear();
-		bidBoxW->Clear();
-		if (++dealMark>3) {
-			dealMark=0;
-		}
-		currentBidder=dealMark-1;
-		if (currentBidder<0) {
-			currentBidder=3;
-		}
-		if (currentBidder>0) {
-			bidBoxN->Text+="\r\n";
-			if (currentBidder>1) {
-				bidBoxE->Text+="\r\n";
-				if (currentBidder>2) {
-					bidBoxS->Text+="\r\n";
-				}
-			}
-		}
-
-		AssertString("(bid (number 0)(player empty)(type empty)(level 0)(suit empty))");
-
-		Run(-1);
-	}
-
-
-
-	void DisplayCards(void) {
-		std::string cardsSorted;
-		for (int i=0;i<4;++i) {
-			cardsSorted=clips->GetCardsInStringTableForPlayer(static_cast<ePlayer>(i));
-			String^ StrVal=gcnew String(cardsSorted.c_str());
-			if (i==0) {
-				tbxPlayerN->Text=StrVal;
-			}
-			else if (i==1) {
-				tbxPlayerE->Text=StrVal;
-			}
-			else if (i==2) {
-				tbxPlayerS->Text=StrVal;
-			}
-			else {
-				tbxPlayerW->Text=StrVal;
-			}
-		}
-	}
-	
-
-
-	void AssertCards(void) {
-		char buffer[80];
-		eCard **pCards=clips->cards->GetCards(static_cast<ePlayer>(0)); // TODO: ourplayer
-		for (int i=0;i<4;++i) {
-			for (int j=0;j<14;++j) {
-				if (pCards[i][j]!=empty) {
-					sprintf_s(buffer,"(card (suit %s)(name %s))",mSuit2clp[spades],mCard2clp[two]);//mSuit2clp[static_cast<eSuit>(i)]);
-					std::cout<<buffer<<::std::endl;
-					AssertString(buffer);
-				}
-				else {
-					break;
-				}
-			}
-		}
-	}
-
-
-	System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-		const std::string playersStr[4]={"N)","E)","S)","W)"};
-		const char players[4]={'N','E','S','W'};
-		
-		InitGame();
-		// trzeba zrobić coś, co powpisuje karty do cards[][]
-		clips->cards->ReadCardsFromFile("3C3D_16pc.txt");
-
-		DisplayCards();
-
-		AssertCards();
-
-		/*if (players[currentBidder]==clips->ourPlayer) {
-			char buffer[15];
-			sprintf_s(buffer,"(player %c)",clips->ourPlayer);
-			AssertString(buffer);
-			R
-		}*/
-		ShowDefglobals("stdout",NULL);
-		clips->PrintFacts();
-
-		while (clips->Bidding()) {
-			if (players[currentBidder]==clips->ourPlayer) {
-				AssertString("(bidding our-player-should-bid)");
-				clips->RetractFactByName("(bidding made-a-bid)");
-				Run(-1);
-		ShowDefglobals("stdout",NULL);
-		clips->PrintFacts();
-				clips->IncrementBidCounter();
-				String^ StrVal=gcnew String(clips->FindLastBid().c_str());
-				bidBoxN->Text+=StrVal;
-				bidBoxN->Text+="\r\n";
-				if (++currentBidder>3) {
-					currentBidder=0;
-				}
-			}
-			else {
-				DialogBox ^wnd = gcnew DialogBox(label5);
-				
-				wnd->ShowDialog();
-				String^ StrVal=gcnew String(label5->Text);
-				if (currentBidder==0) {
-					bidBoxN->Text+=StrVal;
-					bidBoxN->Text+="\r\n";
-				}
-				else if (currentBidder==1) {
-					bidBoxE->Text+=StrVal;
-					bidBoxE->Text+="\r\n";
-				}
-				else if (currentBidder==2) {
-					bidBoxS->Text+=StrVal;
-					bidBoxS->Text+="\r\n";
-				}
-				else {
-					bidBoxW->Text+=StrVal;
-					bidBoxW->Text+="\r\n";
-				}
-				bid=label5->Text;
-				const char* charBid=(const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bid)).ToPointer();
-				//std::cout << "bid: " << charBid << std::endl;
-				clips->PlayerBids(charBid, players[currentBidder]);
-				if (++currentBidder>3) {
-					currentBidder=0;
-				}
-				System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
-				//clips->PrintFacts();
-			} // else
-		} // while (clips->Bidding())
-		ShowDefglobals("stdout",NULL);
-		clips->PrintFacts();
-	} // button1_Click
+	void InitGame(void);
+	void MyForm::DisplayCards(void);
+	void MyForm::AssertCards(void);
+	void MyForm::IncrementCurrentBidder(void);
+	System::Void button1_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 } // namespace vcpp

@@ -5,6 +5,17 @@
 
 #pragma warning(disable: 4996)
 
+
+extern std::map<ePlayer, std::string> mPlayer2clp;
+extern std::map<eSuit, std::string> mSuit2clp;
+extern std::map<eCard, std::string> mCard2clp;
+extern std::map<std::string, ePlayer> mPlayer;
+extern std::map<std::string, eCard> mCard;
+extern std::map<std::string, eSuit> mSuit;
+
+
+
+
 void SwapIOB(FILE *A, FILE *B) {
     FILE temp;
     memcpy(&temp,A,sizeof(struct _iobuf));
@@ -15,7 +26,7 @@ void SwapIOB(FILE *A, FILE *B) {
 
 
 
-ClipsBridge::ClipsBridge(CardsOnTable *mainCards): bidCounter(0), ourPlayer('N') {
+ClipsBridge::ClipsBridge(CardsOnTable *mainCards): bidCounter(0), ourPlayer(N) {
 	cards=mainCards;
 
 	fp=fopen("clips_bridge.log","w");
@@ -264,6 +275,7 @@ void ClipsBridge::PlayerBids(std::string bid, char player) {
 		sprintf_s(buffer,"(bid (number %d)(player %c)(type normal)(level %d)(suit %s))",bidCounter,player,level,suit);
 		Eval("(bind ?*pass-count* 0)",&tempDO);		
 	}
+	std::cout << "ASSERTING: " << buffer << std::endl;
 	AssertString(buffer);
 	//if (NextPlayer(player)==ourPlayer) {
 	//	AssertString("(bidding our-player-should-bid)");
@@ -308,7 +320,7 @@ void ClipsBridge::ResetBidCounter(void) {
 
 
 std::string ClipsBridge::FindLastBid(void) {
-	std::string temp, bidNr, ourPlayerStr(1,ourPlayer);
+	std::string temp, bidNr, ourPlayerStr=mPlayer2clp[ourPlayer];
 	std::stringstream sStrm;
 	int i, end;
 

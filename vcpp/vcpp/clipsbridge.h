@@ -18,7 +18,7 @@ class ClipsBridge {
 public:
 	void *theEnv;
 	std::string bid;
-	char ourPlayer;
+	ePlayer ourPlayer;
 	CardsOnTable *cards;
 
 	ClipsBridge(CardsOnTable *mainCards);
