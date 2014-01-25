@@ -33,9 +33,10 @@ public:
 
 	void ClipsBridge::DealCardsToPlayers(char player);
 	std::string ClipsBridge::GetCardsDealtToPlayer(std::string player);
-	void ClipsBridge::PlayerBids(std::string bid, char player);
+	void ClipsBridge::PlayerBids(std::string bid, char player, int lastBidLevel);
 	bool ClipsBridge::Bidding(void);
 	std::string ClipsBridge::FindLastBid(void);
+	int ClipsBridge::FindLastBidLevel(void);
 
 private:
 	char buffer[BUFFER_SIZE];

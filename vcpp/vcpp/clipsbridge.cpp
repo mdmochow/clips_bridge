@@ -246,7 +246,7 @@ char ClipsBridge::PreviousPlayer(char player) {
 
 
 
-void ClipsBridge::PlayerBids(std::string bid, char player) {
+void ClipsBridge::PlayerBids(std::string bid, char player, int lastBidLevel) {
 	int level;
 	std::stringstream sStrm;
 	char suit[3];
@@ -257,15 +257,15 @@ void ClipsBridge::PlayerBids(std::string bid, char player) {
 	Eval("(bind ?*bids-made* (+ ?*bids-made* 1))",&tempDO);
 
 	if (bid=="PASS") {
-		sprintf_s(buffer,"(bid (number %d)(player %c)(type pass)(level 0)(suit empty))",bidCounter,player);
+		sprintf_s(buffer,"(bid (number %d)(player %c)(type pass)(level %d)(suit empty))",bidCounter,player,lastBidLevel);
 		Eval("(bind ?*pass-count* (+ ?*pass-count* 1))",&tempDO);
 	}
 	else if (bid=="X") {
-		sprintf_s(buffer,"(bid (number %d)(player %c)(type double)(level 0)(suit empty))",bidCounter,player);
+		sprintf_s(buffer,"(bid (number %d)(player %c)(type double)(level %d)(suit empty))",bidCounter,player,lastBidLevel);
 		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
 	else if (bid=="XX") {
-		sprintf_s(buffer,"(bid (number %d)(player %c)(type redouble)(level 0)(suit empty))",bidCounter,player);
+		sprintf_s(buffer,"(bid (number %d)(player %c)(type redouble)(level %d)(suit empty))",bidCounter,player,lastBidLevel);
 		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
 	else {
@@ -355,6 +355,47 @@ std::string ClipsBridge::FindLastBid(void) {
 		sStrm.clear();
 	}
 	return "BNF";
+}
+
+
+
+
+int ClipsBridge::FindLastBidLevel(void) {
+	std::string temp, bidNr;
+	std::stringstream sStrm;
+	int i, end;
+	std::string level;
+
+	bidNr=std::to_string(bidCounter);
+	bidNr+=")";
+
+	GetFactList(&multifieldDO,NULL);
+	end=GetDOEnd(multifieldDO);
+	multifieldPtr=GetValue(multifieldDO);
+	for (i=GetDOBegin(multifieldDO);i<=end;i++) {
+		GetFactPPForm(buffer,BUFFER_SIZE,(fact *)GetMFValue(multifieldPtr,i));
+		//std::cout << buffer << std::endl;
+		sStrm << buffer;
+		sStrm >> temp; // fact number
+		sStrm >> temp; // "(bid"
+		if (temp=="(bid") {
+			sStrm >> temp; // "(number"
+			sStrm >> temp; // "%d)"
+			if (temp==bidNr) {
+				sStrm >> temp; // "(player"
+				sStrm >> temp; // player who made the bid
+				sStrm >> temp; // "(type
+				sStrm >> temp; // card nr
+				sStrm >> temp; // (level
+				sStrm >> level;
+			} // temp==bidNr
+		}
+		while (!sStrm.eof()) {
+			sStrm >> temp;
+		}
+		sStrm.clear();
+	}
+	return 0;
 }
 
 

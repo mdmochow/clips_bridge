@@ -152,7 +152,7 @@ System::Void MyForm::button1_Click(System::Object^  sender, System::EventArgs^  
 			bid=label5->Text;
 			const char* charBid=(const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bid)).ToPointer();
 			//std::cout << "bid: " << charBid << std::endl;
-			clips->PlayerBids(charBid, players[static_cast<int>(currentBidder)]);
+			clips->PlayerBids(charBid, players[static_cast<int>(currentBidder)], clips->FindLastBidLevel());
 			Run(-1);
 			IncrementCurrentBidder();
 			System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
