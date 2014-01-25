@@ -141,33 +141,43 @@
 
  
 (deffunction return-bid-level(?bid-level ?bid-suit ?new-bid)
-	(if (= (str-compare ?bid-suit spades) 0)
-	       then
+	(if (= (str-compare ?bid-suit NT) 0)
+		then
 			(+ ?bid-level 1)
 		else
-			(if (= (str-compare ?bid-suit hearts) 0)
-			       then
-					(if (= (str-compare ?new-bid spades) 0)
-					       then
+			(if (= (str-compare ?bid-suit spades) 0)
+				then
+					(if (= (str-compare ?new-bid NT) 0)
+						then
 							?bid-level
 						else
 							(+ ?bid-level 1)
 					)
 				else
-					(if (= (str-compare ?bid-suit diamonds) 0)
-					       then
-							(if (or (= (str-compare ?new-bid spades) 0) (= (str-compare ?new-bid hearts) 0))
-								then
+					(if (= (str-compare ?bid-suit hearts) 0)
+						then
+							(if (or (= (str-compare ?new-bid spades) 0) (= (str-compare ?new-bid NT) 0))
+								   then
 									?bid-level
 								else
 									(+ ?bid-level 1)
 							)
 						else
-							(if (= (str-compare ?new-bid clubs) 0)
+							(if (= (str-compare ?bid-suit diamonds) 0)
 								then
-									(+ ?bid-level 1)
+									(if (or (= (str-compare ?new-bid NT) 0) (= (str-compare ?new-bid spades) 0) (= (str-compare ?new-bid hearts) 0))
+										then
+											?bid-level
+										else
+											(+ ?bid-level 1)
+									)
 								else
-									?bid-level
+									(if (= (str-compare ?new-bid clubs) 0)
+										then
+											(+ ?bid-level 1)
+										else
+											?bid-level
+									)
 							)
 					)
 			)
