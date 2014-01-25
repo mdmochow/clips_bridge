@@ -257,6 +257,19 @@
 	)
 )
 
+(deffunction check-if-less-than-in-majors(?amount)
+	(if (>= ?*spades* ?amount)
+	    	then
+			FALSE
+		else
+			(if (>= ?*hearts* ?amount)
+			    	then
+					FALSE
+				else
+					TRUE
+			)
+	)
+)
 
 (deffunction check-if-more-than-in-suits(?amount)
 	(if (<= ?*spades* ?amount)
@@ -557,7 +570,6 @@
 	)
 )
  
- 
 (deffunction return-bid-level(?bid-level ?bid-suit ?new-bid)
 	(if (= (str-compare ?bid-suit spades) 0)
 	       then
@@ -590,6 +602,10 @@
 					)
 			)
 	)
+)
+ 
+(deffunction return-bid-level-jump(?bid-level ?bid-suit ?new-bid)
+	(+ (return-bid-level ?bid-level ?bid-suit ?new-bid) 1)
 )
  
  
