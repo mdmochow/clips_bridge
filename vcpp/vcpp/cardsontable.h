@@ -15,7 +15,7 @@ public:
 	CardsOnTable::~CardsOnTable();
 	eCard **CardsOnTable::GetCards(ePlayer player) const;
 	void CardsOnTable::ResetCards(void);
-	void CardsOnTable::ReadCardsFromFile(char *fileName);
+	bool CardsOnTable::ReadCardsFromFile(char *fileName);
 private:
 	eCard ***cards;
 	int amountOfCards[4][4];

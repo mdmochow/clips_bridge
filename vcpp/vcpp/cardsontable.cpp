@@ -59,8 +59,11 @@ void CardsOnTable::ResetCards(void) {
 }
 
 
-void CardsOnTable::ReadCardsFromFile(char *fileName) {
+bool CardsOnTable::ReadCardsFromFile(char *fileName) {
 	std::ifstream file(fileName);
+	if (!file.good()) {
+		return false;
+	}
 	std::string temp;
 	ePlayer player;
 	eCard card;
@@ -84,4 +87,5 @@ void CardsOnTable::ReadCardsFromFile(char *fileName) {
 			std::sort(cards[i][j],cards[i][j]+14);
 		}
 	}
+	return true;
 }

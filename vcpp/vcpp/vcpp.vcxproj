@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="about.cpp" />
     <ClCompile Include="cardsontable.cpp" />
     <ClCompile Include="clipsbridge.cpp" />
     <ClCompile Include="CLIPS\agenda.c" />
@@ -257,6 +258,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="about.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="cardsontable.h" />
     <ClInclude Include="clipsbridge.h" />
     <ClInclude Include="CLIPS\agenda.h" />
@@ -440,6 +444,9 @@
     <ClInclude Include="stringconversion.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="about.resx">
+      <DependentUpon>about.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DialogBox.resx">
       <DependentUpon>DialogBox.h</DependentUpon>
     </EmbeddedResource>

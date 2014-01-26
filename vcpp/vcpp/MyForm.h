@@ -2,6 +2,7 @@
 #include <string>
 #include "clipsbridge.h"
 #include "DialogBox.h"
+#include "about.h"
 #include <iostream>
 #include "stringconversion.h"
 #include "cardsontable.h"
@@ -54,6 +55,8 @@ namespace vcpp {
 	public: 
 	public: System::Windows::Forms::Label^  label9;
 	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::Label^  label10;
+	private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
 	public: 
 	private: 
 	private: 
@@ -91,7 +94,7 @@ namespace vcpp {
 
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
+
 
 
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
@@ -151,7 +154,7 @@ namespace vcpp {
 			this->btnDisplay = (gcnew System::Windows::Forms::Button());
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
@@ -185,6 +188,7 @@ namespace vcpp {
 			this->bidBoxW = (gcnew System::Windows::Forms::TextBox());
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
@@ -231,7 +235,8 @@ namespace vcpp {
 			// 
 			// menuStrip1
 			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->fileToolStripMenuItem});
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->fileToolStripMenuItem, 
+				this->exitToolStripMenuItem});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
 			this->menuStrip1->Size = System::Drawing::Size(794, 24);
@@ -240,17 +245,17 @@ namespace vcpp {
 			// 
 			// fileToolStripMenuItem
 			// 
-			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->aboutToolStripMenuItem});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
-			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
-			this->fileToolStripMenuItem->Text = L"File";
+			this->fileToolStripMenuItem->Size = System::Drawing::Size(61, 20);
+			this->fileToolStripMenuItem->Text = L"About...";
+			this->fileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::fileToolStripMenuItem_Click);
 			// 
-			// aboutToolStripMenuItem
+			// exitToolStripMenuItem
 			// 
-			this->aboutToolStripMenuItem->AccessibleName = L"menuFileAbout";
-			this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
-			this->aboutToolStripMenuItem->Size = System::Drawing::Size(116, 22);
-			this->aboutToolStripMenuItem->Text = L"About...";
+			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(37, 20);
+			this->exitToolStripMenuItem->Text = L"Exit";
+			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
 			// 
 			// pictureBox1
 			// 
@@ -566,16 +571,26 @@ namespace vcpp {
 			// 
 			// textBox1
 			// 
-			this->textBox1->Location = System::Drawing::Point(114, 100);
+			this->textBox1->Location = System::Drawing::Point(12, 86);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(100, 20);
 			this->textBox1->TabIndex = 37;
+			// 
+			// label10
+			// 
+			this->label10->AutoSize = true;
+			this->label10->Location = System::Drawing::Point(9, 67);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(169, 13);
+			this->label10->TabIndex = 38;
+			this->label10->Text = L"Text file containing cards on table:";
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(794, 591);
+			this->Controls->Add(this->label10);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->label8);
@@ -612,9 +627,10 @@ namespace vcpp {
 			this->Controls->Add(this->btnDisplay);
 			this->Controls->Add(this->tbxPlayerN);
 			this->Controls->Add(this->menuStrip1);
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^  >(resources->GetObject(L"$this.Icon")));
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
-			this->Text = L"MyForm";
+			this->Text = L"CLIPS Bridge";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->EndInit();
@@ -645,6 +661,13 @@ private:
 	void MyForm::AssertCards(void);
 	void MyForm::IncrementCurrentBidder(void);
 	System::Void button1_Click(System::Object^  sender, System::EventArgs^  e);
+private: System::Void fileToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 about ^wnd = gcnew about();
+			wnd->Show();
+		 }
+private: System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 this->Close();
+		 }
 };
 
 } // namespace vcpp

@@ -102,10 +102,11 @@ System::Void MyForm::button1_Click(System::Object^  sender, System::EventArgs^  
 	char* fileName=(char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(textBox1->Text)).ToPointer();
 	std::string fullFN=fileName;
 	if (fullFN=="") {
-		fullFN="table";
+		fullFN="table.txt";
 	}
-	fullFN+=".txt";
-	clips->cards->ReadCardsFromFile(const_cast<char *>(fullFN.c_str()));
+	if (!clips->cards->ReadCardsFromFile(const_cast<char *>(fullFN.c_str()))) {
+		return;
+	}
 	System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)fileName));
 
 	DisplayCards();

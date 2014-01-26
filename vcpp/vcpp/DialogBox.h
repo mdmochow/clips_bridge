@@ -94,6 +94,7 @@ namespace vcpp {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(DialogBox::typeid));
 			this->radioButton1 = (gcnew System::Windows::Forms::RadioButton());
 			this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
 			this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
@@ -609,8 +610,12 @@ namespace vcpp {
 			this->Controls->Add(this->radioButton6);
 			this->Controls->Add(this->radioButton36);
 			this->Controls->Add(this->radioButton1);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^  >(resources->GetObject(L"$this.Icon")));
+			this->MaximizeBox = false;
+			this->MinimizeBox = false;
 			this->Name = L"DialogBox";
-			this->Text = L"DialogBox";
+			this->Text = L"Bidding box";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
