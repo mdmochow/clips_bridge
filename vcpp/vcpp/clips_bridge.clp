@@ -624,10 +624,6 @@
 	(+ (return-bid-level ?bid-level ?bid-suit ?new-bid) 1)
 )
  
-(deffunction return-bid-level-jump(?bid-level ?bid-suit ?new-bid)
-	(+ (return-bid-level ?bid-level ?bid-suit ?new-bid) 1)
-)
- 
  
 (deffunction get-longest-suit()
 	(if (and (>= ?*spades* ?*hearts*) (>= ?*spades* ?*diamonds*) (>= ?*spades* ?*clubs*))
