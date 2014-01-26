@@ -1084,6 +1084,9 @@
     <EmbeddedResource Include="DialogBox.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
+    <EmbeddedResource Include="about.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="clips_bridge.clp" />

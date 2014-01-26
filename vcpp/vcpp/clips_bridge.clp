@@ -269,6 +269,25 @@
 )
 
 
+(defrule bidding-block
+	?bidfact <- (bidding our-player-should-bid)
+	?opening <- (bidding-opening (player ?opener)(level ?bid-lvl)(suit ?)(forcing ?))
+	(test (>= ?*pc* 6))
+	(test (<= ?*pc* 10))
+	(or (test (>= ?*spades* 6)) (test (>= ?*hearts* 6)) (test (>= ?*diamonds* 6)) (test (>= ?*clubs* 7)))
+	(test (< (+ ?bid-lvl 1) (determine-block-level)))
+	(not (test (= (str-compare ?opener ?*partner*) 0)))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level (determine-block-level))(suit (get-six-plus-in-suit))))
+	(assert (bidding made-a-bid))
+	(retract ?opening)
+	(assert (bidding-opening (player ?*ourplayer*)(level (determine-block-level))(suit (get-six-plus-in-suit))(forcing no)))
+)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; strong opening (acol, 22+ pc)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
