@@ -5,6 +5,45 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>ClipsBridge</title>
 	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAAEBAAAAAAAAAAAAAAABAQABAQEBAQAAAAAAAQEBAQEAAQEBAQEBAAAAAQEBAQEBAAEBAAAAAQAAAAEAAAABAQABAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAABAAEAAAAAAAAAAAAAAAAAAQABAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAABAAEBAAAAAAAAAAAAAAABAQABAQEAAAAAAAAAAAABAQEAAQEBAQAAAAAAAAABAQEBAAEBAQEBAAAAAAABAQEBAQABAQEBAQEAAAABAQEBAQEAAQEBAQEBAQABAQEBAQEBAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAA=" rel="icon" type="image/x-icon" />
+	<style type="text/css">
+    body {
+     width: 600px;
+     margin-left: auto;
+     margin-right: auto;
+     background-color: #FFFFCC
+    }
+    p {
+		text-align: justify;    
+    }
+    p.w3c {
+		text-align: right;    
+    }
+    h1 {
+		text-align: center;    
+    }
+    td {
+		text-align: right;    
+    }
+    tr, td
+	 {
+		border: 1px solid black;
+    }
+    tr.col
+	 {
+		border: 0px solid black;
+    }
+    td.col
+    {
+      border: 0px solid black;
+    }
+    td.player {
+		text-align: center; 
+    }
+    table.cards, table.bid
+	 {
+		border-collapse:collapse;
+    }
+   </style>
 </head>
 <body>
 <h1>ClipsBridge</h1>
@@ -15,6 +54,7 @@
 <h2>Abstract</h2>
 <p>The goal of the project is to create a virtual bridge player capable of bidding. The player uses Standard American Yellow Card as a bidding system. The expert system used to determine bids is CLIPS. In this framework was implemented a set of rules which reflect the bidding system guidelines. The user interface was created in Windows Forms. It cooperates with the expert system using CLIPS C API.</p>
 </div>
+<hr />
 <div>
 <h2>Architektura oprogramowania</h2>
 <p>Program składa się z dwóch komponentów: aplikacji okienkowej i systemu eksperckiego. Komunikują się one ze sobą poprzez API clipsa w jezyku C. GUI zostało napisane w C++/CLI przy użyciu Windows Forms.</p>
@@ -23,14 +63,43 @@
 <h3>Interfejs użytkownika</h3>
 <p>Aplikacja zajmuje się rozdawaniem kart lub wczytaniem rozdania z pliku, co jest szczególnie użyteczne przy testach. Po ustaleniu rąk wszystich graczy wyświetlane są posortowane karty i rozpoczyna się licytacja. Wirtualny gracz zajmuje zawsze pozycję N. W pierwszej rozgrywce "rozdającym" jest gracz N i to on rozpoczyna licytację. W kolejnych rozgrywkach rozdający zmieniają się zgodnie z ruchem wskazówek zegara. Odzywki innych graczy są odczytywane poprzez okno dialogowe i zapisywane do bazy wiedzy clipsa.</p>
 <h2>Reguły licytacji</h2>
-
+<h3>Otwarcia</h3>
+<ul>
+<li></li>
+</ul>
 <h2>Wyniki testów</h2>
-
+<p>Poniżej zaprezentowano przykładowe rozdania i przebiegi licytacji, które odzwierciedlają możliwości systemu.</p>
+<p>
+<table>
+<tr class="col">
+<td class="col"><table class="cards">
+	<tr><td> </td><td>Piki</td> <td>Kiery</td> <td>Kara</td> <td>Trefle</td></tr>
+	<tr><td class="player">N</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td class="player">E</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td class="player">S</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td class="player">W</td><td></td><td></td><td></td><td></td></tr>
+</table>
+</td>
+<td class="col">
+<table class="bid">
+	<tr><td>1.</td><td>PASS</td><td>PASS</td><td>PASS</td><td>PASS</td></tr>
+	<tr><td>2.</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td>3.</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td>4.</td><td></td><td></td><td></td><td></td></tr>
+</table>
+</td>
+</tr>
+</table>
+</p>
 <h2>Wnioski</h2>
 <p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. </p>
 <h2>Literatura</h2>
+<ol>
+<li>SAYC</li>
+<li>CLIPS reference</li>
+</ol>
 </div>
-<p>
+<p class="w3c">
     <a href="http://validator.w3.org/check?uri=referer"><img
       src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a>
 </p>
