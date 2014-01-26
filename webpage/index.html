@@ -10,23 +10,24 @@
 <h1>ClipsBridge</h1>
 <div>
 <h2>Opis projektu</h2>
-Celem projektu jest zaimplementowanie bota prowadzącego licytację w brydżu. Używany system licytacyjny to Standard American Yellow Card (SAYC). Do realizacji zadania użyto systemu CLIPS. W tym języku napisano bazę reguł używanych do ustalenia odzywki. Jako interfejs użytkownika stworzono aplikację okienkową przy uzyciu Windows Forms, która komunikuje się z clipsem poprzez jego API do języka C.
+<p>Celem projektu jest zaimplementowanie bota prowadzącego licytację w brydżu. Używany system licytacyjny to Standard American Yellow Card (SAYC). Do realizacji zadania użyto systemu CLIPS. W tym języku napisano bazę reguł używanych do ustalenia odzywki. Jako interfejs użytkownika stworzono aplikację okienkową przy uzyciu Windows Forms, która komunikuje się z clipsem poprzez jego API do języka C.</p>
+<p>Projekt powstał Autorami projektu są Marcin Dmochowski i Paweł Bogner.</p>
 <h2>Abstract</h2>
-The goal of the project is to create a virtual bridge player capable of bidding. The player uses Standard American Yellow Card as a bidding system. The expert system used to determine bids is CLIPS. In this framework was implemented a set of rules which reflect the bidding system guidelines. The user interface was created in Windows Forms. It cooperates with the expert system using CLIPS C API. 
+<p>The goal of the project is to create a virtual bridge player capable of bidding. The player uses Standard American Yellow Card as a bidding system. The expert system used to determine bids is CLIPS. In this framework was implemented a set of rules which reflect the bidding system guidelines. The user interface was created in Windows Forms. It cooperates with the expert system using CLIPS C API.</p>
 </div>
 <div>
 <h2>Architektura oprogramowania</h2>
-Program składa się z dwóch komponentów: aplikacji okienkowej i systemu eksperckiego. Komunikują się one ze sobą poprzez API clipsa w jezyku C. GUI zostało napisane w C++/CLI przy użyciu Windows Forms.
+<p>Program składa się z dwóch komponentów: aplikacji okienkowej i systemu eksperckiego. Komunikują się one ze sobą poprzez API clipsa w jezyku C. GUI zostało napisane w C++/CLI przy użyciu Windows Forms.</p>
 <h3>System ekspercki</h3>
-Dla systemu eksperckiego początkowo dostępna jest tylko informacja o swoich kartach. Na tej podstawie wyliczane są punkty (A-4, K-3, Q-2, J-1) oraz liczba kart w każdym z kolorów. Jest to wystarczająca wiedza do rozpoczęcia licytacji. Podczas licytacji do bazy wiedzy dodawane są także kolejne odzywki pozostałych graczy. Dzięki temu wirtualny gracz posiada pełną wiedzę o przebiegu licytacji.
+<p>Dla systemu eksperckiego początkowo dostępna jest tylko informacja o swoich kartach. Na tej podstawie wyliczane są punkty (A&#x2013;4, K&#x2013;3, Q&#x2013;2, J&#x2013;1) oraz liczba kart w każdym z kolorów. Jest to wystarczająca wiedza do rozpoczęcia licytacji. Podczas licytacji do bazy wiedzy dodawane są także kolejne odzywki pozostałych graczy. Dzięki temu wirtualny gracz posiada pełną wiedzę o przebiegu licytacji.</p>
 <h3>Interfejs użytkownika</h3>
-Aplikacja zajmuje się rozdawaniem kart lub wczytaniem rozdania z pliku, co jest szczególnie użyteczne przy testach. Po ustaleniu rąk wszystich graczy wyświetlane są posortowane karty i rozpoczyna się licytacja. Wirtualny gracz zajmuje zawsze pozycję N. W pierwszej rozgrywce "rozdającym" jest gracz N i to on rozpoczyna licytację. W kolejnych rozgrywkach rozdający zmieniają się zgodnie z ruchem wskazówek zegara. Odzywki innych graczy są odczytywane poprzez okno dialogowe i zapisywane do bazy wiedzy clipsa.
+<p>Aplikacja zajmuje się rozdawaniem kart lub wczytaniem rozdania z pliku, co jest szczególnie użyteczne przy testach. Po ustaleniu rąk wszystich graczy wyświetlane są posortowane karty i rozpoczyna się licytacja. Wirtualny gracz zajmuje zawsze pozycję N. W pierwszej rozgrywce "rozdającym" jest gracz N i to on rozpoczyna licytację. W kolejnych rozgrywkach rozdający zmieniają się zgodnie z ruchem wskazówek zegara. Odzywki innych graczy są odczytywane poprzez okno dialogowe i zapisywane do bazy wiedzy clipsa.</p>
 <h2>Reguły licytacji</h2>
 
 <h2>Wyniki testów</h2>
 
 <h2>Wnioski</h2>
-
+<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. </p>
 <h2>Literatura</h2>
 </div>
 <p>
