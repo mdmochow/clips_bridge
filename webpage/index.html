@@ -7,7 +7,7 @@
 	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAAEBAAAAAAAAAAAAAAABAQABAQEBAQAAAAAAAQEBAQEAAQEBAQEBAAAAAQEBAQEBAAEBAAAAAQAAAAEAAAABAQABAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAABAAEAAAAAAAAAAAAAAAAAAQABAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAABAAEBAAAAAAAAAAAAAAABAQABAQEAAAAAAAAAAAABAQEAAQEBAQAAAAAAAAABAQEBAAEBAQEBAAAAAAABAQEBAQABAQEBAQEAAAABAQEBAQEAAQEBAQEBAQABAQEBAQEBAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAA=" rel="icon" type="image/x-icon" />
 	<style type="text/css">
     body {
-     width: 600px;
+     width: 700px;
      margin-left: auto;
      margin-right: auto;
      background-color: #FFFFCC
@@ -53,22 +53,22 @@
    </style>
 </head>
 <body>
-<h1>ClipsBridge</h1>
+<h1>CLIPS Bridge</h1>
 <div>
 <h2>Opis projektu</h2>
-<p>Celem projektu jest zaimplementowanie bota prowadzącego licytację w brydżu. Używany system licytacyjny to Standard American Yellow Card (SAYC). Do realizacji zadania użyto systemu CLIPS. W tym języku napisano bazę reguł używanych do ustalenia odzywki. Jako interfejs użytkownika stworzono aplikację okienkową przy uzyciu Windows Forms, która komunikuje się z clipsem poprzez jego API do języka C.</p>
+<p>Celem projektu jest zaimplementowanie bota prowadzącego licytację w brydżu. Używany system licytacyjny to Standard American Yellow Card (SAYC). Do realizacji zadania użyto systemu CLIPS. W tym języku napisano bazę reguł używanych do ustalenia odzywki. Jako interfejs użytkownika stworzono aplikację okienkową przy użyciu Windows Forms, która komunikuje się z CLIPSem poprzez jego API do języka C.</p>
 <p>Projekt powstał w ramach przedmiotu Metody Sztucznej Inteligencji prowadzonego na Wydziale Elektroniki Politechniki Wrocławskiej na kierunku Automatyka i Robotyka. Autorami projektu są Paweł Bogner i Marcin Dmochowski.</p>
 <h2>Abstract</h2>
-<p>The goal of the project is to create a virtual bridge player capable of bidding. The player uses Standard American Yellow Card as a bidding system. The expert system used to determine bids is CLIPS. In this framework was implemented a set of rules which reflect the bidding system guidelines. The user interface was created in Windows Forms. It cooperates with the expert system using CLIPS C API.</p>
+<p>The goal of the project is to create a virtual bridge player capable of bidding. The player uses Standard American Yellow Card as the bidding system. The expert system used to determine bids was developed in CLIPS. In this framework was implemented a set of rules which reflect the bidding system guidelines. The user interface was created in Windows Forms. It cooperates with the expert system using CLIPS C API.</p>
 </div>
 <hr />
 <div>
 <h2>Architektura oprogramowania</h2>
-<p>Program składa się z dwóch komponentów: aplikacji okienkowej i systemu eksperckiego. Komunikują się one ze sobą poprzez API clipsa w jezyku C. GUI zostało napisane w C++/CLI przy użyciu Windows Forms.</p>
+<p>Program składa się z dwóch komponentów: aplikacji okienkowej i systemu eksperckiego. Komunikują się one ze sobą poprzez API CLIPSa w jezyku C. GUI zostało napisane w C++/CLI przy użyciu Windows Forms.</p>
 <h3>System ekspercki</h3>
 <p>Dla systemu eksperckiego początkowo dostępna jest tylko informacja o swoich kartach. Na tej podstawie wyliczane są punkty (A&#x2013;4, K&#x2013;3, Q&#x2013;2, J&#x2013;1) oraz liczba kart w każdym z kolorów. Jest to wystarczająca wiedza do rozpoczęcia licytacji. Podczas licytacji do bazy wiedzy dodawane są także kolejne odzywki pozostałych graczy. Dzięki temu wirtualny gracz posiada pełną wiedzę o przebiegu licytacji.</p>
 <h3>Interfejs użytkownika</h3>
-<p>Aplikacja zajmuje się rozdawaniem kart lub wczytaniem rozdania z pliku, co jest szczególnie użyteczne przy testach. Po ustaleniu rąk wszystich graczy wyświetlane są posortowane karty i rozpoczyna się licytacja. Wirtualny gracz zajmuje zawsze pozycję N. W pierwszej rozgrywce "rozdającym" jest gracz N i to on rozpoczyna licytację. W kolejnych rozgrywkach rozdający zmieniają się zgodnie z ruchem wskazówek zegara. Odzywki innych graczy są odczytywane poprzez okno dialogowe i zapisywane do bazy wiedzy clipsa.</p>
+<p>Aplikacja zajmuje się rozdawaniem kart lub wczytaniem rozdania z pliku, co jest szczególnie użyteczne przy testach. Po ustaleniu rąk wszystkich graczy wyświetlane są posortowane karty i rozpoczyna się licytacja. Wirtualny gracz zajmuje zawsze pozycję N. W pierwszej rozgrywce "rozdającym" jest gracz N i to on rozpoczyna licytację. W kolejnych rozgrywkach rozdający zmieniają się zgodnie z ruchem wskazówek zegara. Odzywki innych graczy są odczytywane poprzez okno dialogowe i zapisywane do bazy wiedzy CLIPSa.</p>
 <h2>Reguły licytacji</h2>
 <h3>Otwarcia</h3>
 <ul>
@@ -99,6 +99,8 @@
 	</ul>
 	</li>
 </ul>
+<h3>Rebidy</h3>
+<p>Zaimplementowano także rebidy na niektóre otwarcia, np. poparcie nowego koloru, zgłoszenie końcówki po inwicie.</p>
 <h2>Działanie programu</h2>
 <p>Aby ułatwić testowanie, napisano program do generowania rozdań. Pozwalał on na wybranie dowolnej liczby kart dla gracza N, a następnie na wylosowanie pozostałych kart, także dla pozostałych graczy. Dzięki temu można było uzyskać pożądaną rękę, posiadając jednak resztę prawdziwej talii.</p>
 <p>Poniżej zaprezentowano przykładowe rozdanie i przebieg licytacji.</p>
@@ -116,22 +118,23 @@
 <div class="right">
 <table class="bid">
 	<tr><td></td><td>N</td><td>E</td><td>S</td><td>W</td></tr>
-	<tr><td>1.</td><td>1 NT</td><td>PASS</td><td>3 NT</td><td>PASS</td></tr>
-	<tr><td>2.</td><td>PASS</td><td>PASS</td><td></td><td></td></tr>
+	<tr><td>1.</td><td></td><td>PASS</td><td>1 NT</td><td>PASS</td></tr>
+	<tr><td>2.</td><td>3 NT</td><td>PASS</td><td>PASS</td><td>PASS</td></tr>
 </table>
 </div>
 </div>
-
-<img src="ss.png" width="1122" height="631" alt="" longdesc="Przykład działania programu" />
-
+<p><img src="ss.png" width="700" height="394" alt=""/>
+</p>
 <h2>Wnioski</h2>
 <p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku.</p>
-<p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, które w clipsie wykonują się jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem prolog zdecydowanie przewyższa clipsa.</p>
+<p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, które w CLIPSie wykonują się jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem prolog zdecydowanie przewyższa CLIPSa.</p>
+<p>W ramach projektu została stworzona struktura ramowa pozwalająca na stworzenie zaawansowanego gracza. Możliwości rozwoju są duże. Przy rozwoju oprogramowania została wzięta pod uwagę opcja zmiany pozycji gracza. Dzięki temu można doprowadzić np. do gry 3 graczy wirtualnych z człowiekiem, co może być dobrym treningiem dla początkującego gracza.</p>
 <h2>Literatura</h2>
 <ol>
-<li>P. Szczepaniak, <a href="http://gerwazy.lo3.wroc.pl/~pszczepaniak/brydz/licytacja_PSz_sayc.pdf">System SAYC</a></li>
-<li><a href="http://clipsrules.sourceforge.net/documentation/v630/bpg.pdf">CLIPS Reference Manual, Basic Programming Guide</a>,</li>
-<li><a href="http://clipsrules.sourceforge.net/documentation/v630/apg.pdf">CLIPS Reference Manual, Advanced Programming Guide</a>.</li>
+<li>P. Szczepaniak, <a href="http://gerwazy.lo3.wroc.pl/~pszczepaniak/brydz/licytacja_PSz_sayc.pdf">System SAYC;</a></li>
+<li><a href="http://clipsrules.sourceforge.net/documentation/v630/bpg.pdf">CLIPS Reference Manual, Basic Programming Guide</a>;</li>
+<li><a href="http://clipsrules.sourceforge.net/documentation/v630/apg.pdf">CLIPS Reference Manual, Advanced Programming Guide</a>;</li>
+<li><a href="http://sequoia.ict.pwr.wroc.pl/~witold/ai/CLIPS_tutorial/CLIPS_tutorial_1.html">CLIPS tutorial</a>.</li>
 </ol>
 </div>
 <p class="w3c">
