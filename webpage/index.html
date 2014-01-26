@@ -28,20 +28,25 @@
 	 {
 		border: 1px solid black;
     }
-    tr.col
-	 {
-		border: 0px solid black;
-    }
-    td.col
-    {
-      border: 0px solid black;
-    }
     td.player {
 		text-align: center; 
     }
-    table.cards, table.bid
-	 {
-		border-collapse:collapse;
+    table.cards, table.bid{
+		border-collapse: collapse;
+    }
+    .lrwrap {
+ 		width:auto;
+ 		overflow:hidden;
+		padding-top: 10px;
+    }
+	 .left {
+ 		width:250px;
+		float:left;
+	 }
+
+	 .right {
+ 		width:250px;
+ 		float:right;
     }
    </style>
 </head>
@@ -69,28 +74,46 @@
 </ul>
 <h2>Wyniki testów</h2>
 <p>Poniżej zaprezentowano przykładowe rozdania i przebiegi licytacji, które odzwierciedlają możliwości systemu.</p>
-<p>
-<table>
-<tr class="col">
-<td class="col"><table class="cards">
+
+<div class="lrwrap">
+<div class="left">
+<table class="cards">
 	<tr><td> </td><td>Piki</td> <td>Kiery</td> <td>Kara</td> <td>Trefle</td></tr>
 	<tr><td class="player">N</td><td></td><td></td><td></td><td></td></tr>
 	<tr><td class="player">E</td><td></td><td></td><td></td><td></td></tr>
 	<tr><td class="player">S</td><td></td><td></td><td></td><td></td></tr>
 	<tr><td class="player">W</td><td></td><td></td><td></td><td></td></tr>
 </table>
-</td>
-<td class="col">
+</div>
+<div class="right">
 <table class="bid">
-	<tr><td>1.</td><td>PASS</td><td>PASS</td><td>PASS</td><td>PASS</td></tr>
+	<tr><td>1.</td><td>N</td><td>E</td><td>S</td><td>W</td></tr>
 	<tr><td>2.</td><td></td><td></td><td></td><td></td></tr>
 	<tr><td>3.</td><td></td><td></td><td></td><td></td></tr>
 	<tr><td>4.</td><td></td><td></td><td></td><td></td></tr>
 </table>
-</td>
-</tr>
+</div>
+</div>
+<div class="lrwrap">
+<div class="left">
+<table class="cards">
+	<tr><td> </td><td>Piki</td> <td>Kiery</td> <td>Kara</td> <td>Trefle</td></tr>
+	<tr><td class="player">N</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td class="player">E</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td class="player">S</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td class="player">W</td><td></td><td></td><td></td><td></td></tr>
 </table>
-</p>
+</div>
+<div class="right">
+<table class="bid">
+	<tr><td>1.</td><td>N</td><td>E</td><td>S</td><td>W</td></tr>
+	<tr><td>2.</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td>3.</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td>4.</td><td></td><td></td><td></td><td></td></tr>
+</table>
+</div>
+</div>
+
 <h2>Wnioski</h2>
 <p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. </p>
 <h2>Literatura</h2>
