@@ -68,7 +68,7 @@
 <h3>System ekspercki</h3>
 <p>Dla systemu eksperckiego początkowo dostępna jest tylko informacja o swoich kartach. Na tej podstawie wyliczane są punkty (A&#x2013;4, K&#x2013;3, Q&#x2013;2, J&#x2013;1) oraz liczba kart w każdym z kolorów. Jest to wystarczająca wiedza do rozpoczęcia licytacji. Podczas licytacji do bazy wiedzy dodawane są także kolejne odzywki pozostałych graczy. Dzięki temu wirtualny gracz posiada pełną wiedzę o przebiegu licytacji.</p>
 <h3>Interfejs użytkownika</h3>
-<p>Aplikacja zajmuje się rozdawaniem kart lub wczytaniem rozdania z pliku, co jest szczególnie użyteczne przy testach. Po ustaleniu rąk wszystkich graczy wyświetlane są posortowane karty i rozpoczyna się licytacja. Wirtualny gracz zajmuje zawsze pozycję N. W pierwszej rozgrywce "rozdającym" jest gracz N i to on rozpoczyna licytację. W kolejnych rozgrywkach rozdający zmieniają się zgodnie z ruchem wskazówek zegara. Odzywki innych graczy są odczytywane poprzez okno dialogowe i zapisywane do bazy wiedzy clipsa.</p>
+<p>Aplikacja zajmuje się rozdawaniem kart lub wczytaniem rozdania z pliku, co jest szczególnie użyteczne przy testach. Po ustaleniu rąk wszystkich graczy wyświetlane są posortowane karty i rozpoczyna się licytacja. Wirtualny gracz zajmuje zawsze pozycję N. W pierwszej rozgrywce "rozdającym" jest gracz N i to on rozpoczyna licytację. W kolejnych rozgrywkach rozdający zmieniają się zgodnie z ruchem wskazówek zegara. Odzywki innych graczy są odczytywane poprzez okno dialogowe i zapisywane do bazy wiedzy CLIPSa.</p>
 <h2>Reguły licytacji</h2>
 <h3>Otwarcia</h3>
 <ul>
@@ -123,11 +123,11 @@
 </table>
 </div>
 </div>
-<p><img src="ss.png" width="700" height="394" alt="" />
+<p><img src="ss.png" width="700" height="394" alt=""/>
 </p>
 <h2>Wnioski</h2>
 <p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku.</p>
-<p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, które w clipsie wykonują się jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem prolog zdecydowanie przewyższa clipsa.</p>
+<p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, które w CLIPSie wykonują się jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem prolog zdecydowanie przewyższa CLIPSa.</p>
 <p>W ramach projektu została stworzona struktura ramowa pozwalająca na stworzenie zaawansowanego gracza. Możliwości rozwoju są duże. Przy rozwoju oprogramowania została wzięta pod uwagę opcja zmiany pozycji gracza. Dzięki temu można doprowadzić np. do gry 3 graczy wirtualnych z człowiekiem, co może być dobrym treningiem dla początkującego gracza.</p>
 <h2>Literatura</h2>
 <ol>
