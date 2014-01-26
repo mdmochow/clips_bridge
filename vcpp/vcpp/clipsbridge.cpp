@@ -246,7 +246,7 @@ char ClipsBridge::PreviousPlayer(char player) {
 
 
 
-void ClipsBridge::PlayerBids(std::string bid, char player, int lastBidLevel) {
+void ClipsBridge::PlayerBids(std::string bid, char player, int lastBidLevel, std::string lastBidSuit) {
 	int level;
 	std::stringstream sStrm;
 	char suit[3];
@@ -257,15 +257,15 @@ void ClipsBridge::PlayerBids(std::string bid, char player, int lastBidLevel) {
 	Eval("(bind ?*bids-made* (+ ?*bids-made* 1))",&tempDO);
 
 	if (bid=="PASS") {
-		sprintf_s(buffer,"(bid (number %d)(player %c)(type pass)(level %d)(suit empty))",bidCounter,player,lastBidLevel);
+		sprintf_s(buffer,"(bid (number %d)(player %c)(type pass)(level %d)(suit %s))",bidCounter,player,lastBidLevel,lastBidSuit.c_str());
 		Eval("(bind ?*pass-count* (+ ?*pass-count* 1))",&tempDO);
 	}
 	else if (bid=="X") {
-		sprintf_s(buffer,"(bid (number %d)(player %c)(type double)(level %d)(suit empty))",bidCounter,player,lastBidLevel);
+		sprintf_s(buffer,"(bid (number %d)(player %c)(type double)(level %d)(suit %s))",bidCounter,player,lastBidLevel,lastBidSuit.c_str());
 		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
 	else if (bid=="XX") {
-		sprintf_s(buffer,"(bid (number %d)(player %c)(type redouble)(level %d)(suit empty))",bidCounter,player,lastBidLevel);
+		sprintf_s(buffer,"(bid (number %d)(player %c)(type redouble)(level %d)(suit %s))",bidCounter,player,lastBidLevel,lastBidSuit.c_str());
 		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
 	else {
@@ -273,13 +273,10 @@ void ClipsBridge::PlayerBids(std::string bid, char player, int lastBidLevel) {
 		sStrm >> level;
 		sStrm >> suit;
 		sprintf_s(buffer,"(bid (number %d)(player %c)(type normal)(level %d)(suit %s))",bidCounter,player,level,suit);
-		Eval("(bind ?*pass-count* 0)",&tempDO);		
+		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
-	std::cout << "ASSERTING: " << buffer << std::endl;
+	//std::cout << "ASSERTING: " << buffer << std::endl;
 	AssertString(buffer);
-	//if (NextPlayer(player)==ourPlayer) {
-	//	AssertString("(bidding our-player-should-bid)");
-	//}
 }
    
 
@@ -388,6 +385,7 @@ int ClipsBridge::FindLastBidLevel(void) {
 				sStrm >> temp; // card nr
 				sStrm >> temp; // (level
 				sStrm >> level;
+				return std::stoi(level);
 			} // temp==bidNr
 		}
 		while (!sStrm.eof()) {
@@ -396,6 +394,52 @@ int ClipsBridge::FindLastBidLevel(void) {
 		sStrm.clear();
 	}
 	return 0;
+}
+
+
+
+
+std::string ClipsBridge::FindLastBidSuit(void) {
+	std::string temp, bidNr;
+	std::stringstream sStrm;
+	int i, end;
+	std::string suit;
+
+	bidNr=std::to_string(bidCounter);
+	bidNr+=")";
+
+	GetFactList(&multifieldDO,NULL);
+	end=GetDOEnd(multifieldDO);
+	multifieldPtr=GetValue(multifieldDO);
+	for (i=GetDOBegin(multifieldDO);i<=end;i++) {
+		GetFactPPForm(buffer,BUFFER_SIZE,(fact *)GetMFValue(multifieldPtr,i));
+		//std::cout << buffer << std::endl;
+		sStrm << buffer;
+		sStrm >> temp; // fact number
+		sStrm >> temp; // "(bid"
+		if (temp=="(bid") {
+			sStrm >> temp; // "(number"
+			sStrm >> temp; // "%d)"
+			if (temp==bidNr) {
+				sStrm >> temp; // "(player"
+				sStrm >> temp; // player who made the bid
+				sStrm >> temp; // "(type
+				sStrm >> temp; // card nr
+				sStrm >> temp; // "(level"
+				sStrm >> temp; // bid level
+				sStrm >> temp; // "(suit"
+				sStrm >> suit; // suit))
+				int size=suit.size();
+				suit.resize(size-2);
+				return suit;
+			} // temp==bidNr
+		}
+		while (!sStrm.eof()) {
+			sStrm >> temp;
+		}
+		sStrm.clear();
+	}
+	return "";
 }
 
 
@@ -416,11 +460,8 @@ std::string ClipsBridge::ReadPlayerBid(std::stringstream &sStrm) {
 			return std::string(1, level.at(0)) + " NT";
 		return std::string(1, level.at(0)) + " " + boost::to_upper_copy(std::string(1, suit.at(0)));
 	}
-	if(type == "pass)") {
-		DATA_OBJECT tempDO;
-		Eval("(bind ?*pass-count* (+ ?*pass-count* 1))",&tempDO);
+	if(type == "pass)")
 		return "PASS";
-	}
 	if(type == "double)")
 		return "X";
 	if(type == "redouble)")

@@ -67,7 +67,7 @@ void MyForm::AssertCards(void) {
 				buffer+=")(name ";
 				buffer+=mCard2clp[pCards[i][j]];
 				buffer+="))";
-				std::cout<<buffer<<::std::endl;
+				//std::cout << buffer << std::endl;
 				AssertString(const_cast<char *>(buffer.c_str()));
 			}
 			else {
@@ -112,16 +112,18 @@ System::Void MyForm::button1_Click(System::Object^  sender, System::EventArgs^  
 
 	AssertCards();
 
-	ShowDefglobals("stdout",NULL);
-	clips->PrintFacts();
+	//ShowDefglobals("stdout",NULL);
+	//clips->PrintFacts();
 
 	while (clips->Bidding()) {
+		std::cout << std::endl << "beginning of loop: " << std::endl;
+		ShowDefglobals("stdout",NULL);
 		if (currentBidder==clips->ourPlayer) {
 			AssertString("(bidding our-player-should-bid)");
 			clips->RetractFactByName("(bidding made-a-bid)");
 			Run(-1);
-			ShowDefglobals("stdout",NULL);
-			clips->PrintFacts();
+			//ShowDefglobals("stdout",NULL);
+			//clips->PrintFacts();
 			clips->IncrementBidCounter();
 			String^ StrVal=gcnew String(clips->FindLastBid().c_str());
 			bidBoxN->Text+=StrVal;
@@ -152,13 +154,16 @@ System::Void MyForm::button1_Click(System::Object^  sender, System::EventArgs^  
 			bid=label5->Text;
 			const char* charBid=(const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bid)).ToPointer();
 			//std::cout << "bid: " << charBid << std::endl;
-			clips->PlayerBids(charBid, players[static_cast<int>(currentBidder)], clips->FindLastBidLevel());
+			clips->PlayerBids(charBid, players[static_cast<int>(currentBidder)], clips->FindLastBidLevel(), clips->FindLastBidSuit());
 			Run(-1);
+			//ShowDefglobals("stdout",NULL);
 			IncrementCurrentBidder();
 			System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
 			//clips->PrintFacts();
 		} // else
+		std::cout << "end of loop: " << std::endl;
+		ShowDefglobals("stdout",NULL);
 	} // while (clips->Bidding())
-	ShowDefglobals("stdout",NULL);
-	clips->PrintFacts();
+	//ShowDefglobals("stdout",NULL);
+	//clips->PrintFacts();
 } // button1_Click

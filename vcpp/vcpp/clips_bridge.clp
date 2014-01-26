@@ -586,19 +586,6 @@
 )
 
 
-(defrule bid-pass
-	(declare (salience -10000))
-	?bidfact <- (bidding our-player-should-bid)
-	(bid (number ?bid-nr)(player ?)(type pass)(level ?bid-lvl)(suit ?))
-	(test (= ?bid-nr ?*bids-made*))
-=>
-	(retract ?bidfact)
-	(bind ?*bids-made* (+ ?*bids-made* 1))
-	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type pass)(level ?bid-lvl)(suit empty)))
-	(assert (bidding made-a-bid))
-)
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -668,6 +655,22 @@
 					(>= (return-cards-in-colour ?suit) 4)
 				else
 					(>= (return-cards-in-colour ?suit) 5)
+					
+			)
+	)
+) 
+
+
+(deffunction got-required-support-after-rebid(?suit)
+	(if (or (= (str-compare ?suit spades) 0)(= (str-compare ?suit hearts) 0))
+	       then
+			(>= (return-cards-in-colour ?suit) 2)
+		else
+			(if (= (str-compare ?suit diamonds) 0)
+			       then
+					(>= (return-cards-in-colour ?suit) 3)
+				else
+					(>= (return-cards-in-colour ?suit) 4)
 					
 			)
 	)
@@ -861,6 +864,16 @@
 )
 
 
+(deffunction revert-texas-suit(?suit)
+	(if (= (str-compare ?suit hearts) 0)
+		then
+			spades
+		else
+			hearts	
+	)
+)
+
+
 (defrule respond-to-opening-1NT-2NT
 	?bidfact <- (bidding our-player-should-bid)
 	(test (>= ?*pc* 10))
@@ -896,24 +909,6 @@
 )
 
 
-(defrule respond-to-opening-1NT-stayman
-	?bidfact <- (bidding our-player-should-bid)
-	(test (>= ?*pc* 8))
-	(test (<= ?*pc* 9))
-	(bidding-opening (player ?bid-player)(level 1)(suit NT)(forcing ?))
-	(test (= (str-compare ?bid-player ?*partner*) 0))
-	(or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five)))
-	(bid (number ?bid-nr)(player ?)(type pass)(level ?previous-level)(suit ?previous-suit))
-	(test (= ?bid-nr ?*bids-made*))
-	(test (check-if-bid-valid ?previous-level ?previous-suit 2 clubs))
-=>
-	(retract ?bidfact)
-	(bind ?*pass-count* 0)
-	(bind ?*bids-made* (+ ?*bids-made* 1))
-	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit clubs)))
-)
-
-
 (defrule respond-to-opening-1NT-colour-transfer
 	?bidfact <- (bidding our-player-should-bid)
 	(test (>= ?*pc* 6))
@@ -934,44 +929,25 @@
 
 (defrule respond-to-opening-1NT-colour-no-majors
 	?bidfact <- (bidding our-player-should-bid)
-	(test (>= ?*pc* 8))
+	(test (>= ?*pc* 10))
 	(bidding-opening (player ?bid-player)(level 1)(suit NT)(forcing ?))
 	(test (= (str-compare ?bid-player ?*partner*) 0))
 	(not (or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five))))
 	(or (test (>= ?*diamonds* 5)) (test (>= ?*clubs* 5)))
 	(bid (number ?bid-nr)(player ?)(type pass)(level ?previous-level)(suit ?previous-suit))
 	(test (= ?bid-nr ?*bids-made*))
-	(test (check-if-bid-valid ?previous-level ?previous-suit 2 (get-minor-suit)))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 (get-minor-suit)))
 =>
 	(retract ?bidfact)
 	(bind ?*pass-count* 0)
 	(bind ?*bids-made* (+ ?*bids-made* 1))
-	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit (get-minor-suit))))
-)
-
-
-(defrule respond-to-opening-1NT-colour-no-majors-or-minors
-	?bidfact <- (bidding our-player-should-bid)
-	(test (>= ?*pc* 4))
-	(test (<= ?*pc* 7))
-	(bidding-opening (player ?bid-player)(level 1)(suit NT)(forcing ?))
-	(test (= (str-compare ?bid-player ?*partner*) 0))
-	(not (or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five))))
-	(not (or (test (>= ?*spades* 5)) (test (>= ?*hearts* 5)) (test (>= ?*diamonds* 5)) (test (>= ?*clubs* 5))))
-	(bid (number ?bid-nr)(player ?)(type pass)(level ?previous-level)(suit ?previous-suit))
-	(test (= ?bid-nr ?*bids-made*))
-	(test (check-if-bid-valid ?previous-level ?previous-suit 2 spades))
-=>
-	(retract ?bidfact)
-	(bind ?*pass-count* 0)
-	(bind ?*bids-made* (+ ?*bids-made* 1))
-	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit spades)))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 3)(suit (get-minor-suit))))
 )
 
 
 (defrule respond-to-opening-1NT-pass
 	?bidfact <- (bidding our-player-should-bid)
-	(test (<= ?*pc* 3))
+	(test (<= ?*pc* 5))
 	(bidding-opening (player ?bid-player)(level 1)(suit NT)(forcing ?))
 	(test (= (str-compare ?bid-player ?*partner*) 0))
 	(not (or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five))))
@@ -982,34 +958,53 @@
 	(retract ?bidfact)
 	(bind ?*pass-count* (+ ?*pass-count* 1))
 	(bind ?*bids-made* (+ ?*bids-made* 1))
-	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type pass)(level ?previous-level)(suit empty)))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type pass)(level ?previous-level)(suit ?previous-suit)))
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; responses to ?@!ER?R?!@? opening
+; responses to blocking openings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defrule respond-to-blocking-opening-higher
+	?bidfact <- (bidding our-player-should-bid)
+	(bidding-opening (player ?bid-player)(level ?bid-lvl)(suit ?bid-suit)(forcing no))
+	(test (= (str-compare ?bid-player ?*partner*) 0))
+	(test (<= ?*pc* 15))
+	(bid (number ?bid-nr)(player ?)(type normal)(level ?previous-level)(suit ?previous-suit))
+	(or (test (= ?bid-nr ?*bids-made*)) (test (= ?bid-nr (- ?*bids-made* 2))))
+	(test (>= (return-cards-in-colour ?bid-suit) 3))
+	(test (check-if-bid-valid ?previous-level ?previous-suit (return-bid-level ?previous-level ?previous-suit ?bid-suit) ?bid-suit))
+=>
+	(retract ?bidfact)
+	(bind ?*pass-count* 0)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level (return-bid-level ?previous-level ?previous-suit ?bid-suit))(suit ?bid-suit)))
+)
 
 
+(defrule respond-to-blocking-opening-3NT
+	?bidfact <- (bidding our-player-should-bid)
+	(bidding-opening (player ?bid-player)(level ?bid-lvl)(suit ?bid-suit)(forcing no))
+	(test (= (str-compare ?bid-player ?*partner*) 0))
+	(test (>= ?*pc* 16))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (>= (return-cards-in-colour ?bid-suit) 2))
+	(or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five)))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 NT))
+=>
+	(retract ?bidfact)
+	(bind ?*pass-count* 0)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 3)(suit NT)))
+)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; responses to acol
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-(defrule respond-to-forcing-opening-low
+(defrule respond-to-acol-opening-low
 	?bidfact <- (bidding our-player-should-bid)
 	(test (<= ?*pc* 7))
 	(bidding-opening (player ?bid-player)(level 2)(suit clubs)(forcing yes))
@@ -1025,28 +1020,380 @@
 )
 
 
-;(defrule respond-to-forcing-opening
-;	?bidfact <- (bidding our-player-should-bid)
-;	(test (>= ?*pc* 8))
-;	(bidding-opening (player ?*partner*)(level 2)(suit clubs)(forcing yes))
-;=>
-;	(retract ?bidfact)
-;	(bind ?*pass-count* 0)
-;	(bind ?*bids-made* (+ ?*bids-made* 1))
-;	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit diamonds)))
-;)
- 
- 
-(defrule pass-in-response
-	(declare (salience -1000))
+(defrule respond-to-acol-opening-2NT
 	?bidfact <- (bidding our-player-should-bid)
-	(bidding-opening (player ?bid-player)(level ?)(suit ?)(forcing no))
+	(test (>= ?*pc* 8))
+	(bidding-opening (player ?bid-player)(level 2)(suit clubs)(forcing yes))
 	(test (= (str-compare ?bid-player ?*partner*) 0))
-	(bid (number ?bid-nr)(player ?)(type pass)(level ?bid-lvl)(suit ?))
+	(or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five)))
+	(bid (number ?bid-nr)(player ?)(type pass)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 2 NT))
+=>
+	(retract ?bidfact)
+	(bind ?*pass-count* 0)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit NT)))
+)
+
+
+(defrule respond-to-acol-opening-2-colour
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 8))
+	(bidding-opening (player ?bid-player)(level 2)(suit clubs)(forcing yes))
+	(test (= (str-compare ?bid-player ?*partner*) 0))
+	(and (not (test (check-if-balanced-hand-with-one-five))) (not (test (check-if-less-than-in-suits 5))))
+	(bid (number ?bid-nr)(player ?)(type pass)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 2 (get-longest-suit)))
+=>
+	(retract ?bidfact)
+	(bind ?*pass-count* 0)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit (get-longest-suit))))
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; rebids on our opening
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule rebid-open-1C-NT
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 18))
+	(test (<= ?*pc* 19))
+	(or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five)))
+	?rebid-fact <- (bidding ourplayer-should-rebid-NT 1)
+	(bid (number ?bid-nr)(player ?)(type pass)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 2 NT))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit NT)))
+	(retract ?rebid-fact)
+)
+	
+
+(defrule rebid-open-2C-2NT
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 22))
+	(test (<= ?*pc* 24))
+	(or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five)))
+	?rebid-fact <- (bidding ourplayer-should-rebid-NT 2)
+	(bid (number ?bid-nr)(player ?)(type pass)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 2 NT))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 2)(suit NT)))
+	(retract ?rebid-fact)
+)
+	
+
+(defrule rebid-open-2C-3NT
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 25))
+	(test (<= ?*pc* 27))
+	(or (and (test (check-if-less-than-in-suits 5)) (test (check-if-more-than-in-suits 1))) (test (check-if-balanced-hand-with-one-five)))
+	?rebid-fact <- (bidding ourplayer-should-rebid-NT 3)
+	(bid (number ?bid-nr)(player ?)(type pass)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 NT))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 3)(suit NT)))
+	(retract ?rebid-fact)
+)
+
+
+(defrule rebid-my-suit-not-NT
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 12))
+	(test (<= ?*pc* 15))
+	(bidding-opening (player ?bid-player)(level 1)(suit ?my-suit)(forcing no))
+	(test (= ?bid-player ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level 2)(suit ?my-suit))
+	(test (= ?bid-player-2 ?*partner*))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 ?my-suit))
+	(not (test (= (str-compare ?my-suit NT) 0)))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 3)(suit ?my-suit)))
+)
+
+
+(defrule rebid-suit-major-finish
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 16))
+	(bidding-opening (player ?bid-player)(level 1)(suit ?my-suit)(forcing no))
+	(test (= ?bid-player ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level 2)(suit ?my-suit))
+	(test (= ?bid-player-2 ?*partner*))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 4 ?my-suit))
+	(or (test (= (str-compare ?my-suit spades) 0)) (test (= (str-compare ?my-suit hearts) 0)))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 4)(suit ?my-suit)))
+)
+
+
+(defrule rebid-partner-suit-not-NT
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 12))
+	(test (<= ?*pc* 15))
+	(bidding-opening (player ?bid-player)(level ?)(suit ?my-suit)(forcing no))
+	(test (= ?bid-player ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?partner-level)(suit ?partner-suit))
+	(test (= ?bid-player-2 ?*partner*))
+	(not (test (= (str-compare ?my-suit ?partner-suit) 0)))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 ?partner-suit))
+	(not (test (= (str-compare ?my-suit NT) 0)))
+	(not (test (= (str-compare ?partner-suit NT) 0)))
+	(test (>= (return-cards-in-colour ?partner-suit) 4))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level (return-bid-level ?previous-level ?previous-suit ?partner-suit))(suit ?partner-suit)))
+)
+
+
+(defrule rebid-partner-suit-not-NT-major-finish
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 16))
+	(bidding-opening (player ?bid-player)(level ?)(suit ?my-suit)(forcing no))
+	(test (= ?bid-player ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?partner-level)(suit ?partner-suit))
+	(test (= ?bid-player-2 ?*partner*))
+	(not (test (= (str-compare ?my-suit ?partner-suit) 0)))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 4 ?partner-suit))
+	(not (test (= (str-compare ?my-suit NT) 0)))
+	(not (test (= (str-compare ?partner-suit NT) 0)))
+	(test (>= (return-cards-in-colour ?partner-suit) 4))
+	(or (test (= (str-compare ?partner-suit spades) 0)) (test (= (str-compare ?partner-suit hearts) 0)))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 4)(suit ?partner-suit)))
+)
+
+
+(defrule rebid-suit-finish-NT
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 17))
+	(bidding-opening (player ?bid-player)(level ?my-suit)(suit ?)(forcing no))
+	(test (= ?bid-player ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?)(suit NT))
+	(test (= ?bid-player-2 ?*partner*))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 NT))
+	(test (= (str-compare ?my-suit NT) 0))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 3)(suit NT)))
+)
+
+
+(defrule rebid-transfer
+	?bidfact <- (bidding our-player-should-bid)
+	(bidding-opening (player ?bid-player)(level ?bid-level)(suit NT)(forcing no))
+	(test (= ?bid-player ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?)(suit ?texas))
+	(test (= ?bid-player-2 ?*partner*))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit ?bid-level (revert-texas-suit ?texas)))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level ?bid-level)(suit (revert-texas-suit ?texas))))
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; rebids on partner's opening
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule rebid-p-suit-not-NT
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 10))
+	(bidding-opening (player ?bid-player)(level 1)(suit ?partner-suit)(forcing no))
+	(test (= ?bid-player ?*partner*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?)(suit ?partner-suit))
+	(test (= ?bid-player-2 ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-3)(type normal)(level ?)(suit ?partner-suit))
+	(test (= ?bid-player-3 ?*partner*))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 4 ?partner-suit))
+	(not (test (= (str-compare ?partner-suit NT) 0)))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 4)(suit ?partner-suit)))
+)
+
+
+(defrule rebid-p-suit-not-NT-low
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 8))
+	(test (<= ?*pc* 9))
+	(bidding-opening (player ?bid-player)(level 1)(suit ?partner-suit)(forcing no))
+	(test (= ?bid-player ?*partner*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level 2)(suit ?partner-suit))
+	(test (= ?bid-player-2 ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-3)(type normal)(level 3)(suit ?partner-suit))
+	(test (= ?bid-player-3 ?*partner*))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 ?partner-suit))
+	(not (test (= (str-compare ?partner-suit NT) 0)))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 3)(suit ?partner-suit)))
+)
+
+
+(defrule rebid-no-fit-NT-finish
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 14))
+	(bidding-opening (player ?bid-player)(level ?)(suit ?partner-suit)(forcing no))
+	(test (= ?bid-player ?*partner*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?)(suit ?my-suit))
+	(test (= ?bid-player-2 ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-3)(type normal)(level ?)(suit ?partner-suit-2))
+	(test (= ?bid-player-3 ?*partner*))
+	(not (test (= (str-compare ?my-suit ?partner-suit) 0)))
+	(not (test (= (str-compare ?partner-suit ?partner-suit-2) 0)))
+	(not (test (= (str-compare ?my-suit ?partner-suit-2) 0)))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 NT))
+	(not (test (= (str-compare ?my-suit NT) 0)))
+	(not (test (= (str-compare ?partner-suit NT) 0)))
+	(not (test (= (str-compare ?partner-suit-2 NT) 0)))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 3)(suit NT)))
+)
+
+
+(defrule rebid-support-longer-colour
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 10))
+	(bidding-opening (player ?bid-player)(level ?)(suit ?partner-suit)(forcing no))
+	(test (= ?bid-player ?*partner*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?)(suit ?my-suit))
+	(test (= ?bid-player-2 ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-3)(type normal)(level ?)(suit ?partner-suit-2))
+	(test (= ?bid-player-3 ?*partner*))
+	(not (test (= (str-compare ?my-suit ?partner-suit) 0)))
+	(not (test (= (str-compare ?my-suit ?partner-suit-2) 0)))
+	(test (= (str-compare ?partner-suit ?partner-suit-2) 0))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 ?partner-suit))
+	(not (test (= (str-compare ?my-suit NT) 0)))
+	(not (test (= (str-compare ?partner-suit NT) 0)))
+	(got-required-support-after-rebid ?partner-suit)
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 4)(suit ?partner-suit)))
+)
+
+
+(defrule rebid-low-texas
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 7))
+	(test (<= ?*pc* 8))
+	(bidding-opening (player ?bid-player)(level ?)(suit NT)(forcing no))
+	(test (= ?bid-player ?*partner*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?)(suit ?))
+	(test (= ?bid-player-2 ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-3)(type normal)(level ?bid-lvl)(suit ?my-texas))
+	(test (= ?bid-player-3 ?*partner*))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 3 ?my-texas))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 3)(suit ?my-texas)))
+)
+
+
+(defrule rebid-finish-texas
+	?bidfact <- (bidding our-player-should-bid)
+	(test (>= ?*pc* 9))
+	(bidding-opening (player ?bid-player)(level ?)(suit NT)(forcing no))
+	(test (= ?bid-player ?*partner*))
+	(bid (number ?)(player ?bid-player-2)(type normal)(level ?)(suit ?))
+	(test (= ?bid-player-2 ?*ourplayer*))
+	(bid (number ?)(player ?bid-player-3)(type normal)(level ?bid-lvl)(suit ?my-texas))
+	(test (= ?bid-player-3 ?*partner*))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?previous-level)(suit ?previous-suit))
+	(test (= ?bid-nr ?*bids-made*))
+	(test (check-if-bid-valid ?previous-level ?previous-suit 4 ?my-texas))
+=>
+	(retract ?bidfact)
+	(bind ?*bids-made* (+ ?*bids-made* 1))
+	(bind ?*pass-count* 0)
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type normal)(level 4)(suit ?my-texas)))
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; pass
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule pass
+	(declare (salience -10000))
+	?bidfact <- (bidding our-player-should-bid)
+	(bid (number ?bid-nr)(player ?)(type pass)(level ?bid-lvl)(suit ?bid-suit))
 	(test (= ?bid-nr ?*bids-made*))
 =>
 	(retract ?bidfact)
 	(bind ?*bids-made* (+ ?*bids-made* 1))
 	(bind ?*pass-count* (+ ?*pass-count* 1))
-	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type pass)(level ?bid-lvl)(suit empty)))
+	(assert (bid (number ?*bids-made*)(player ?*ourplayer*)(type pass)(level ?bid-lvl)(suit ?bid-suit)))
 )
