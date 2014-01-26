@@ -40,12 +40,12 @@
 		padding-top: 10px;
     }
 	 .left {
- 		width:250px;
+ 		width:300px;
 		float:left;
 	 }
 
 	 .right {
- 		width:250px;
+ 		width:200px;
  		float:right;
     }
    </style>
@@ -55,7 +55,7 @@
 <div>
 <h2>Opis projektu</h2>
 <p>Celem projektu jest zaimplementowanie bota prowadzącego licytację w brydżu. Używany system licytacyjny to Standard American Yellow Card (SAYC). Do realizacji zadania użyto systemu CLIPS. W tym języku napisano bazę reguł używanych do ustalenia odzywki. Jako interfejs użytkownika stworzono aplikację okienkową przy uzyciu Windows Forms, która komunikuje się z clipsem poprzez jego API do języka C.</p>
-<p>Projekt powstał w ramach przedmiotu Metody Sztucznej Inteligencji prowadzonego na Wydziale Elektroniki Politechniki Wrocławskiej na kierunku Automatyka i Robotyka. Autorami projektu są Marcin Dmochowski i Paweł Bogner.</p>
+<p>Projekt powstał w ramach przedmiotu Metody Sztucznej Inteligencji prowadzonego na Wydziale Elektroniki Politechniki Wrocławskiej na kierunku Automatyka i Robotyka. Autorami projektu są Paweł Bogner i Marcin Dmochowski.</p>
 <h2>Abstract</h2>
 <p>The goal of the project is to create a virtual bridge player capable of bidding. The player uses Standard American Yellow Card as a bidding system. The expert system used to determine bids is CLIPS. In this framework was implemented a set of rules which reflect the bidding system guidelines. The user interface was created in Windows Forms. It cooperates with the expert system using CLIPS C API.</p>
 </div>
@@ -95,55 +95,39 @@
 	<li>10+ pc, 5+ &diams;/&clubs;: kolor zgłaszany na poziome 3,</li>
 	</ul>
 </ul>
-<h2>Wyniki testów</h2>
+<h2>Działanie programu</h2>
 <p>Aby ułatwić testowanie, napisano program do generowania rozdań. Pozwalał on na wybranie dowolnej liczby kart dla gracza N, a następnie na wylosowanie pozostałych kart, także dla pozostałych graczy. Dzięki temu można było uzyskać pożądaną rękę, posiadając jednak resztę prawdziwej talii.</p>
-<p>Poniżej zaprezentowano przykładowe rozdania i przebiegi licytacji, które odzwierciedlają możliwości systemu.</p>
+<p>Poniżej zaprezentowano przykładowe rozdanie i przebieg licytacji.</p>
 
 <div class="lrwrap">
 <div class="left">
 <table class="cards">
-	<tr><td> </td><td>Piki</td> <td>Kiery</td> <td>Kara</td> <td>Trefle</td></tr>
-	<tr><td class="player">N</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td class="player">E</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td class="player">S</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td class="player">W</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td> </td><td>&spades;</td> <td>&hearts;</td> <td>&diams;</td> <td>&clubs;</td></tr>
+	<tr><td class="player">N</td><td>3 7 9 10</td><td>5 10 Q K</td><td>2 A</td><td>3 J K</td></tr>
+	<tr><td class="player">E</td><td></td><td>6 7</td><td>3 4 7 8</td><td>6 7 8 Q A</td></tr>
+	<tr><td class="player">S</td><td>5 Q K A</td><td>3 8 A</td><td>9 J Q</td><td>5 9 10</td></tr>
+	<tr><td class="player">W</td><td>2 6 8 J</td><td>2 4 9 J</td><td>5 6 K</td><td>2</td></tr>
 </table>
 </div>
 <div class="right">
 <table class="bid">
-	<tr><td>1.</td><td>N</td><td>E</td><td>S</td><td>W</td></tr>
-	<tr><td>2.</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td>3.</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td>4.</td><td></td><td></td><td></td><td></td></tr>
+	<tr><td></td><td>N</td><td>E</td><td>S</td><td>W</td></tr>
+	<tr><td>1.</td><td>1 NT</td><td>PASS</td><td>3 NT</td><td>PASS</td></tr>
+	<tr><td>2.</td><td>PASS</td><td>PASS</td><td></td><td></td></tr>
 </table>
 </div>
 </div>
-<div class="lrwrap">
-<div class="left">
-<table class="cards">
-	<tr><td> </td><td>Piki</td> <td>Kiery</td> <td>Kara</td> <td>Trefle</td></tr>
-	<tr><td class="player">N</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td class="player">E</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td class="player">S</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td class="player">W</td><td></td><td></td><td></td><td></td></tr>
-</table>
-</div>
-<div class="right">
-<table class="bid">
-	<tr><td>1.</td><td>N</td><td>E</td><td>S</td><td>W</td></tr>
-	<tr><td>2.</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td>3.</td><td></td><td></td><td></td><td></td></tr>
-	<tr><td>4.</td><td></td><td></td><td></td><td></td></tr>
-</table>
-</div>
-</div>
+
+
 
 <h2>Wnioski</h2>
-<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. </p>
+<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku.</p>
+<p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, które w clipsie wykonują się jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem prolog zdecydowanie przewyższa clipsa.</p>
 <h2>Literatura</h2>
 <ol>
-<li>SAYC</li>
-<li>CLIPS reference</li>
+<li>P. Szczepaniak, <a href="http://gerwazy.lo3.wroc.pl/~pszczepaniak/brydz/licytacja_PSz_sayc.pdf">System SAYC</a></li>
+<li><a href="http://clipsrules.sourceforge.net/documentation/v630/bpg.pdf">CLIPS Reference Manual, Basic Programming Guide</a>,</li>
+<li><a href="http://clipsrules.sourceforge.net/documentation/v630/apg.pdf">CLIPS Reference Manual, Advanced Programming Guide</a>.</li>
 </ol>
 </div>
 <p class="w3c">
