@@ -116,8 +116,8 @@ System::Void MyForm::button1_Click(System::Object^  sender, System::EventArgs^  
 	//clips->PrintFacts();
 
 	while (clips->Bidding()) {
-		std::cout << std::endl << "beginning of loop: " << std::endl;
-		ShowDefglobals("stdout",NULL);
+		//std::cout << std::endl << "beginning of loop: " << std::endl;
+		//ShowDefglobals("stdout",NULL);
 		if (currentBidder==clips->ourPlayer) {
 			AssertString("(bidding our-player-should-bid)");
 			clips->RetractFactByName("(bidding made-a-bid)");
@@ -161,8 +161,8 @@ System::Void MyForm::button1_Click(System::Object^  sender, System::EventArgs^  
 			System::Runtime::InteropServices::Marshal::FreeHGlobal(System::IntPtr((void*)charBid));
 			//clips->PrintFacts();
 		} // else
-		std::cout << "end of loop: " << std::endl;
-		ShowDefglobals("stdout",NULL);
+		//std::cout << "end of loop: " << std::endl;
+		//ShowDefglobals("stdout",NULL);
 	} // while (clips->Bidding())
 	//ShowDefglobals("stdout",NULL);
 	//clips->PrintFacts();

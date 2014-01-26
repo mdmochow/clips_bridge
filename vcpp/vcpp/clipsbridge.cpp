@@ -272,7 +272,8 @@ void ClipsBridge::PlayerBids(std::string bid, char player, int lastBidLevel, std
 		sStrm << bid;
 		sStrm >> level;
 		sStrm >> suit;
-		sprintf_s(buffer,"(bid (number %d)(player %c)(type normal)(level %d)(suit %s))",bidCounter,player,level,suit);
+		const char *bidSuit=(mSuit2clp[mSuit[suit]]).c_str();
+		sprintf_s(buffer,"(bid (number %d)(player %c)(type normal)(level %d)(suit %s))",bidCounter,player,level,bidSuit);
 		Eval("(bind ?*pass-count* 0)",&tempDO);
 	}
 	//std::cout << "ASSERTING: " << buffer << std::endl;

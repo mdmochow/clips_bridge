@@ -6,7 +6,7 @@
 
 enum ePlayer {N=0, E, S, W};
 enum eCard {two=2, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace, empty};
-enum eSuit {spades=0, hearts, diamonds, clubs};
+enum eSuit {spades=0, hearts, diamonds, clubs, NT};
 
 
 class CardsOnTable {

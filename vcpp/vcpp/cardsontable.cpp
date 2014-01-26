@@ -7,10 +7,10 @@ std::map<std::string, ePlayer> mPlayer = boost::assign::map_list_of ("N", N) ("E
 std::map<std::string, eCard> mCard = boost::assign::map_list_of ("2", two) ("3", three) ("4", four) ("5", five) 
 																("6", six) ("7", seven) ("8", eight) ("9", nine)
 																("10", ten) ("J", jack) ("Q", queen) ("K", king) ("A", ace);
-std::map<std::string, eSuit> mSuit = boost::assign::map_list_of ("S", spades) ("H", hearts) ("D", diamonds) ("C", clubs);
+std::map<std::string, eSuit> mSuit = boost::assign::map_list_of ("S", spades) ("H", hearts) ("D", diamonds) ("C", clubs) ("NT", NT);
 
 std::map<ePlayer, std::string> mPlayer2clp = boost::assign::map_list_of (N, "N") (E, "E") (S, "S") (W, "W");
-std::map<eSuit, std::string> mSuit2clp = boost::assign::map_list_of (spades, "spades") (hearts, "hearts") (diamonds, "diamonds") (clubs, "clubs");
+std::map<eSuit, std::string> mSuit2clp = boost::assign::map_list_of (spades, "spades") (hearts, "hearts") (diamonds, "diamonds") (clubs, "clubs") (NT, "NT");
 std::map<eCard, std::string> mCard2clp = boost::assign::map_list_of (two, "two") (three, "three") (four, "four") (five, "five") 
 								(six, "six") (seven, "seven") (eight, "eight") (nine, "nine")
 								(ten, "ten") (jack, "jack") (queen, "queen") (king, "king") (ace, "ace");
