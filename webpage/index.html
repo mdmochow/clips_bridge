@@ -95,7 +95,7 @@
 	<li>10+ pc, 5+ &diams;/&clubs;: kolor zgłaszany na poziome 3,</li>
 	</ul>
 </ul>
-<h2>Wyniki testów</h2>
+<h2>Działanie programu</h2>
 <p>Aby ułatwić testowanie, napisano program do generowania rozdań. Pozwalał on na wybranie dowolnej liczby kart dla gracza N, a następnie na wylosowanie pozostałych kart, także dla pozostałych graczy. Dzięki temu można było uzyskać pożądaną rękę, posiadając jednak resztę prawdziwej talii.</p>
 <p>Poniżej zaprezentowano przykładowe rozdanie i przebieg licytacji.</p>
 
@@ -119,8 +119,10 @@
 </div>
 
 
+
 <h2>Wnioski</h2>
-<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. </p>
+<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku.</p>
+<p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, które w clipsie wykonują się jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem prolog zdecydowanie przewyższa clipsa.</p>
 <h2>Literatura</h2>
 <ol>
 <li>P. Szczepaniak, <a href="http://gerwazy.lo3.wroc.pl/~pszczepaniak/brydz/licytacja_PSz_sayc.pdf">System SAYC</a></li>
