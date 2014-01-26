@@ -7,7 +7,7 @@
 	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAAEBAAAAAAAAAAAAAAABAQABAQEBAQAAAAAAAQEBAQEAAQEBAQEBAAAAAQEBAQEBAAEBAAAAAQAAAAEAAAABAQABAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAABAAEAAAAAAAAAAAAAAAAAAQABAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAABAAEBAAAAAAAAAAAAAAABAQABAQEAAAAAAAAAAAABAQEAAQEBAQAAAAAAAAABAQEBAAEBAQEBAAAAAAABAQEBAQABAQEBAQEAAAABAQEBAQEAAQEBAQEBAQABAQEBAQEBAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAA=" rel="icon" type="image/x-icon" />
 	<style type="text/css">
     body {
-     width: 600px;
+     width: 700px;
      margin-left: auto;
      margin-right: auto;
      background-color: #FFFFCC
@@ -53,13 +53,13 @@
    </style>
 </head>
 <body>
-<h1>ClipsBridge</h1>
+<h1>CLIPS Bridge</h1>
 <div>
 <h2>Opis projektu</h2>
-<p>Celem projektu jest zaimplementowanie bota prowadzącego licytację w brydżu. Używany system licytacyjny to Standard American Yellow Card (SAYC). Do realizacji zadania użyto systemu CLIPS. W tym języku napisano bazę reguł używanych do ustalenia odzywki. Jako interfejs użytkownika stworzono aplikację okienkową przy uzyciu Windows Forms, która komunikuje się z clipsem poprzez jego API do języka C.</p>
+<p>Celem projektu jest zaimplementowanie bota prowadzącego licytację w brydżu. Używany system licytacyjny to Standard American Yellow Card (SAYC). Do realizacji zadania użyto systemu CLIPS. W tym języku napisano bazę reguł używanych do ustalenia odzywki. Jako interfejs użytkownika stworzono aplikację okienkową przy użyciu Windows Forms, która komunikuje się z CLIPSem poprzez jego API do języka C.</p>
 <p>Projekt powstał w ramach przedmiotu Metody Sztucznej Inteligencji prowadzonego na Wydziale Elektroniki Politechniki Wrocławskiej na kierunku Automatyka i Robotyka. Autorami projektu są Paweł Bogner i Marcin Dmochowski.</p>
 <h2>Abstract</h2>
-<p>The goal of the project is to create a virtual bridge player capable of bidding. The player uses Standard American Yellow Card as a bidding system. The expert system used to determine bids is CLIPS. In this framework was implemented a set of rules which reflect the bidding system guidelines. The user interface was created in Windows Forms. It cooperates with the expert system using CLIPS C API.</p>
+<p>The goal of the project is to create a virtual bridge player capable of bidding. The player uses Standard American Yellow Card as the bidding system. The expert system used to determine bids was developed in CLIPS. In this framework was implemented a set of rules which reflect the bidding system guidelines. The user interface was created in Windows Forms. It cooperates with the expert system using CLIPS C API.</p>
 </div>
 <hr />
 <div>
@@ -121,17 +121,17 @@
 </table>
 </div>
 </div>
-
-<img src="ss.png" width="1122" height="631" alt="" longdesc="Przykład działania programu" />
-
+<p><img src="ss.png" width="700" height="394" alt="" />
+</p>
 <h2>Wnioski</h2>
 <p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku.</p>
 <p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, które w clipsie wykonują się jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem prolog zdecydowanie przewyższa clipsa.</p>
 <h2>Literatura</h2>
 <ol>
-<li>P. Szczepaniak, <a href="http://gerwazy.lo3.wroc.pl/~pszczepaniak/brydz/licytacja_PSz_sayc.pdf">System SAYC</a></li>
-<li><a href="http://clipsrules.sourceforge.net/documentation/v630/bpg.pdf">CLIPS Reference Manual, Basic Programming Guide</a>,</li>
-<li><a href="http://clipsrules.sourceforge.net/documentation/v630/apg.pdf">CLIPS Reference Manual, Advanced Programming Guide</a>.</li>
+<li>P. Szczepaniak, <a href="http://gerwazy.lo3.wroc.pl/~pszczepaniak/brydz/licytacja_PSz_sayc.pdf">System SAYC;</a></li>
+<li><a href="http://clipsrules.sourceforge.net/documentation/v630/bpg.pdf">CLIPS Reference Manual, Basic Programming Guide</a>;</li>
+<li><a href="http://clipsrules.sourceforge.net/documentation/v630/apg.pdf">CLIPS Reference Manual, Advanced Programming Guide</a>;</li>
+<li><a href="http://sequoia.ict.pwr.wroc.pl/~witold/ai/CLIPS_tutorial/CLIPS_tutorial_1.html">CLIPS tutorial</a>.</li>
 </ol>
 </div>
 <p class="w3c">
