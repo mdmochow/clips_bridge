@@ -1465,7 +1465,7 @@
 (defrule pass
 	(declare (salience -10000))
 	?bidfact <- (bidding our-player-should-bid)
-	(bid (number ?bid-nr)(player ?)(type pass)(level ?bid-lvl)(suit ?bid-suit))
+	(bid (number ?bid-nr)(player ?)(type ?)(level ?bid-lvl)(suit ?bid-suit))
 	(test (= ?bid-nr ?*bids-made*))
 =>
 	(retract ?bidfact)
