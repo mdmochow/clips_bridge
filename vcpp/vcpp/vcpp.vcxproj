@@ -445,6 +445,7 @@
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stringconversion.h" />
   </ItemGroup>
   <ItemGroup>
@@ -460,6 +461,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="clips_bridge.clp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="vcpp.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

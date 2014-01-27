@@ -1076,6 +1076,9 @@
     <ClInclude Include="about.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">
@@ -1090,5 +1093,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="clips_bridge.clp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="vcpp.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

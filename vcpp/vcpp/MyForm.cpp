@@ -124,7 +124,7 @@ System::Void MyForm::button1_Click(System::Object^  sender, System::EventArgs^  
 			clips->RetractFactByName("(bidding made-a-bid)");
 			Run(-1);
 			//ShowDefglobals("stdout",NULL);
-			//clips->PrintFacts();
+			clips->PrintFacts();
 			clips->IncrementBidCounter();
 			String^ StrVal=gcnew String(clips->FindLastBid().c_str());
 			bidBoxN->Text+=StrVal;
