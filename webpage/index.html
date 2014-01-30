@@ -109,6 +109,12 @@
 <p>Zaimplementowano także rebidy na niektóre otwarcia, np. poparcie nowego koloru, zgłoszenie końcówki po inwicie.</p>
 <h2>Testowanie</h2>
 <p>Aby ułatwić testowanie, napisano program do generowania rozdań. Pozwalał on na wybranie dowolnej liczby kart dla gracza N, a następnie na wylosowanie pozostałych kart, także dla pozostałych graczy. Dzięki temu można było uzyskać pożądaną rękę, posiadając jednak resztę prawdziwej talii.</p>
+<p>Testowanie programu przebiegało w dwóch etapach. Pierwsza faza polegała na sprawdzaniu świeżo zaimplementowanej funkcjonalności podczas pisania kodu. Oprócz tego na bieżąco sprawdzano także na bieząco, czy nowo dodany kod nie miał wpływu na istniejące już reguły dla przykładowego scenariusza (np. otwarcie 1 w starszy kolor i poparcie partnera). Na koniec przeprowadzono testy dla scenariuszy skonstruowane tak, aby pokrywały najbardziej typowe przypadki dla użytych reguł. Nie sprawdzano jak system zachowałby się gdyby przeciwnicy wtrącili się do licytacji. Licytacja w obronie także nie została przetestowana.</p>
+<p>Oto scenariusze, które są rozgrywane poprawnie:
+<ul>
+<li>otwarcie 1 w starszy kolor, poparcie partnera,</li>
+<li>otwarcie 1 bez atu, sign off 3 bez atu</li>
+</ul></p>
 <p>Poniżej zaprezentowano przykładowe rozdanie i przebieg licytacji.</p>
 
 <div class="lrwrap">
@@ -131,6 +137,9 @@
 </div>
 <p><img src="ss.png" width="700" alt=""/>
 </p>
+
+<h2>GiB</h2>
+<p>Programem uważanym obecnie za najlepszego sztucznego gracza jest GiB. Potrafi on zarówno licytować, jak i prowadzić rozgrywkę. Wspierane systemy licytacji to m.in. SAYC, 2/1 GF, Acol. Jest on także używany jako bot do gry na portalu Bridge Base Online, największym miejscu w sieci, gdzie można zagrać online w brydża. Jedyne co wiadomo o jego działaniu, to że opiera sie na algorytmach przeszukiwania przy licytacji i rozgrywce. Niestety nie można było przetestować jego działania, ponieważ oprogramowanie to jest na płatnej licencji. Warto także wspomnieć, że program zebrał wiele pozytywnych opinii, m.in. w The Bridge World i Dutch Bridge Magazine IMP.</p>
 <h2>Wnioski</h2>
 <p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku. Główną przyczyną był stopień skomplikowania rosnący wraz z implementowaniem kolejnych okrążeń licytacji. Drzewo możliwych przebiegów licytacji rośnie wykładniczo w miarę kolejnych odzywek. Powodowało to, że trzeba było brać pod uwagę coraz to nowe możliwości i wyjątki. W związku z tym czas potrzebny na realizację projektu był niewystarczający.</p>
 <p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w Prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że Prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, których warunki w CLIPSie są sprawdzane jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem Prolog zdecydowanie przewyższa CLIPSa.</p>
@@ -141,6 +150,7 @@
 <li><a href="http://clipsrules.sourceforge.net/documentation/v630/bpg.pdf">CLIPS Reference Manual, Basic Programming Guide</a>;</li>
 <li><a href="http://clipsrules.sourceforge.net/documentation/v630/apg.pdf">CLIPS Reference Manual, Advanced Programming Guide</a>;</li>
 <li><a href="http://sequoia.ict.pwr.wroc.pl/~witold/ai/CLIPS_tutorial/CLIPS_tutorial_1.html">CLIPS tutorial</a>.</li>
+<li><a href="http://www.gibware.com/">GiB</a>.</li>
 </ol>
 </div>
 <p class="w3c">
