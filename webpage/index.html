@@ -107,7 +107,7 @@
 </ul>
 <h3>Rebidy</h3>
 <p>Zaimplementowano także rebidy na niektóre otwarcia, np. poparcie nowego koloru, zgłoszenie końcówki po inwicie.</p>
-<h2>Działanie programu</h2>
+<h2>Testowanie</h2>
 <p>Aby ułatwić testowanie, napisano program do generowania rozdań. Pozwalał on na wybranie dowolnej liczby kart dla gracza N, a następnie na wylosowanie pozostałych kart, także dla pozostałych graczy. Dzięki temu można było uzyskać pożądaną rękę, posiadając jednak resztę prawdziwej talii.</p>
 <p>Poniżej zaprezentowano przykładowe rozdanie i przebieg licytacji.</p>
 
@@ -132,7 +132,7 @@
 <p><img src="ss.png" width="700" alt=""/>
 </p>
 <h2>Wnioski</h2>
-<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku.</p>
+<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku. Główną przyczyną był stopień skomplikowania rosnący wraz z implementowaniem kolejnych okrążeń licytacji. Drzewo możliwych przebiegów licytacji rośnie wykładniczo w miarę kolejnych odzywek. Powodowało to, że trzeba było brać pod uwagę coraz to nowe możliwości i wyjątki. W związku z tym czas potrzebny na realizację projektu był niewystarczający.</p>
 <p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w Prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że Prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, których warunki w CLIPSie są sprawdzane jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem Prolog zdecydowanie przewyższa CLIPSa.</p>
 <p>W ramach projektu została stworzona struktura ramowa pozwalająca na stworzenie zaawansowanego gracza. Możliwości rozwoju są duże. Przy rozwoju oprogramowania została wzięta pod uwagę opcja zmiany pozycji gracza. Dzięki temu można doprowadzić np. do gry 3 graczy wirtualnych z człowiekiem, co może być dobrym treningiem dla początkującego gracza.</p>
 <h2>Literatura</h2>
