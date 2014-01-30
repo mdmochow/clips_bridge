@@ -1099,4 +1099,12 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="spades_logo.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="spades_big.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

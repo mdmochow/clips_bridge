@@ -46,6 +46,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>clips_bridge</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -464,6 +465,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="vcpp.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="spades_big.ico" />
+    <Image Include="spades_logo.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
