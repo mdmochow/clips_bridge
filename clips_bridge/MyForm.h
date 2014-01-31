@@ -4,7 +4,6 @@
 #include "DialogBox.h"
 #include "about.h"
 #include <iostream>
-#include "stringconversion.h"
 #include "cardsontable.h"
 
 extern std::map<ePlayer, std::string> mPlayer2clp;
