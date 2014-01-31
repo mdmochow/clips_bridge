@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>ClipsBridge</title>
+	<title>CLIPS Bridge</title>
 	<link rel="icon" type="image/x-icon" href="spades_logo.ico" />
 	<style type="text/css">
     body {
@@ -75,47 +75,82 @@
 <p>Dla systemu eksperckiego początkowo dostępna jest tylko informacja o swoich kartach. Na tej podstawie wyliczane są punkty (A&#x2013;4, K&#x2013;3, Q&#x2013;2, J&#x2013;1) oraz liczba kart w każdym z kolorów. Jest to wystarczająca wiedza do rozpoczęcia licytacji. Podczas licytacji do bazy wiedzy dodawane są także kolejne odzywki pozostałych graczy. Dzięki temu wirtualny gracz posiada pełną wiedzę o przebiegu licytacji.</p>
 <h3>Interfejs użytkownika</h3>
 <p>Aplikacja zajmuje się rozdawaniem kart lub wczytaniem rozdania z pliku, co jest szczególnie użyteczne przy testach. Po ustaleniu rąk wszystkich graczy wyświetlane są posortowane karty i rozpoczyna się licytacja. Wirtualny gracz zajmuje zawsze pozycję N. W pierwszej rozgrywce "rozdającym" jest gracz N i to on rozpoczyna licytację. W kolejnych rozgrywkach rozdający zmieniają się zgodnie z ruchem wskazówek zegara. Odzywki innych graczy są odczytywane poprzez okno dialogowe i zapisywane do bazy wiedzy CLIPSa.</p>
-<h2>Reguły licytacji</h2>
+<h2>Zaimplementowane reguły licytacji</h2>
 <h3>Otwarcia</h3>
 <ul>
-<li>6-10 pc: 6+ otwarcie 2 w ten kolor (poza &clubs;), 7+ otwarcie 3 w ten kolor;</li>
+<li>6-10 pc: 6+: otwarcie blokujące 2 w ten kolor (poza &clubs;), 7+: otwarcie blokujące 3 w ten kolor;</li>
 <li>22+ pc: 2 &clubs;, Acol, forsujące;</li>
-<li>15-17 pc, skład zrównoważony: 1NT;</li>
+<li>15-17 pc, skład zrównoważony (4333, 4432, 5332): 1NT;</li>
+<li>18-19 pc, skład zrównoważony: 1&clubs;, w drugim okrążeniu licytacji zgłaszane nisko NT;</li>
 <li>20-21 pc, skład zrównoważony: 2NT;</li>
-<li>13+ pc, 5+ &spades;/&hearts;: otwarcie 1 w dłuższy z tych kolorów, jeżeli są jednakowej długości, to 1&spades; </li>
-<li>13+ pc, brak starszej piątki: otwarcie 1 w dłuższy kolor z &diams;/&clubs; przy 33 otwarcie 1&clubs;, przy 44 &#x2014; 1&diams;.</li>
+<li>22-24 pc, skład zrównoważony: 2&clubs;, w drugim okrążeniu licytacji zgłaszane 2NT;</li>
+<li>25-27 pc, skład zrównoważony: 2&clubs;, w drugim okrążeniu licytacji zgłaszane 3NT;</li>
+<li>12+ pc, 5+ &spades;/&hearts;: otwarcie 1 w dłuższy z tych kolorów, jeżeli są jednakowej długości 1&spades;;</li>
+<li>12+ pc, brak 5+ &spades;/&hearts;: otwarcie 1 w dłuższy kolor z &diams;/&clubs; przy 33 otwarcie 1&clubs;, przy 44 otwarcie 1&diams;.</li>
 </ul>
 <h3>Odpowiedzi na otwarcia</h3>
 <ul>
-	<li>Po otwarciu 1 w kolor
+	<li>Po otwarciu 1&spades;/&hearts;/&diams;/&clubs;:
 	<ul>
-	<li>0-5 pc: pas</li>
-	<li>6-10 pc: nowy kolor 4+ na wysokości 1,</li>
-	<li>6-10 pc: z fitem poparcie partnera, nisko,</li>
-	<li>6-10 pc: 1NT, gdy nie można zgłosić innej odzywki,</li>
+	<li>0-5 pc: pas;</li>
+	<li>6-10 pc, z fitem: poparcie partnera nisko;</li>
+	<li>6-10 pc: nowy kolor 4+ na wysokości 1;</li>
+	<li>6-10 pc: 1NT, gdy nie można zgłosić innej odzywki;</li>
+	<li>11-12 pc, z fitem: poparcie partnera z przeskokiem;</li>
+	<li>11-12 pc, brak 5+ &spades;/&hearts;: 2NT w odpowiedzi na 1&diams;/&clubs;;</li>
+	<li>11+ pc: nowy kolor 5+ na wysokości 1/2;</li>
+	<li>13+ pc: 2NT w odpowiedzi na 1&spades;/&hearts; (2NT Jacobiego, oznacza fit 4+);</li>
+	<li>13-15 pc, brak 5+ &spades;/&hearts;: 3NT w odpowiedzi na 1&diams;/&clubs;;</li>
+	<li>17+ pc: nowy kolor 5+ z przeskokiem.</li>
 	</ul>
 	</li>
-	<li>Po otwarciu 1 NT
+	<li>Po otwarciu 1NT:
 	<ul>
-	<li>0-5 pc : pas;</li>
-	<li>10-11 pc, zrównoważony: 2NT;</li>
-	<li>12+ pc, zrównoważony: 3NT, signoff;</li>
-	<li>6+ pc, 5+ &spades;/&hearts;: kolor zgłaszany transferem;</li>
-	<li>10+ pc, 5+ &diams;/&clubs;: kolor zgłaszany na poziome 3,</li>
+	<li>0-5 pc: pas;</li>
+	<li>6+ pc, 5+ &spades;/&hearts;: zgłoszenie koloru transferem (2&hearts; zgłasza &spades;, 2&diams; zgłasza &hearts;);</li>
+	<li>10+ pc, brak 5+ &spades;/&hearts;: zgłoszenie 5+ &diams;/&clubs; na poziomie 3;</li>
+	<li>10-11 pc, skład zrównoważony: 2NT;</li>
+	<li>12+ pc, skład zrównoważony: 3NT, sign-off.</li>
+	</ul>
+	</li>
+	<li>Po otwarciu blokującym:
+	<ul>
+	<li>0-15 pc, 3+ w kolorze bloku: przedłużenie bloku;</li>
+	<li>16+ pc, skład zrównoważony: 3NT, sign-off.</li>
+	</ul>
+	</li>
+	<li>Po otwarciu 2&clubs;:
+	<ul>
+	<li>0-7 pc: 2&diams;, sztuczny pas;</li>
+	<li>8+ pc: zgłoszenie koloru 5+ &spades;/&hearts; na poziomie 2 lub &diams;/&clubs; na poziomie 3;</li>
+	<li>8+ pc, skład zrównoważony: 2NT.</li>
 	</ul>
 	</li>
 </ul>
 <h3>Rebidy</h3>
-<p>Zaimplementowano także rebidy na niektóre otwarcia, np. poparcie nowego koloru, zgłoszenie końcówki po inwicie.</p>
+<p>Zaimplementowano również rebidy na niektóre odzywki dla drugiego okrążenia licytacji:</p>
+<ul>
+<li>odzywki bezatutowe w drugim okrążeniu licytacji po otwarciu 1&clubs;/2&clubs;;</li>
+<li>ponowienie własnego koloru po poparciu tegoż przez partnera, zachęta do końcówki;</li>
+<li>zgłoszenie końcówki we własny kolor po poparciu tegoż przez partnera;</li>
+<li>poparcie koloru zgłoszonego przez partnera;</li>
+<li>zgłoszenie końcówki w kolorze zgłoszonym przez partnera;</li>
+<li>zgłoszenie końcówki 3NT po odpowiedzi partnera o braku fitu na zgłoszony uprzednio kolor;</li>
+<li>akceptacja koloru zgłoszonego transferem po otwarciu bezatutowym;</li>
+<li>zgłoszenie końcówki po otwarciu partnera w proponowany przez niego kolor po jego zachęcie do końcówki;</li>
+<li>zgłoszenie końcówki 3NT po stwierdzeniu braku fitu w trzy kolory;</li>
+<li>zgłoszenie końcówki w kolorze zgłoszonym przez partnera po powtórzeniu tegoż (informacja o dłuższym kolorze);</li>
+<li>zgłoszenie końcówki w kolorze uprzednio zgłoszonym przez partnera z fitem włoskim;</li>
+<li>zgłoszenie końcówki w kolorze zgłoszonym przez partnera jako drugi jego kolor;</li>
+<li>ponowienie koloru zaakceptowanego przez partnera poprzez transfer, zachęta do końcówki;</li>
+<li>zgłoszenie końcówki w kolorze zaakceptowantm przez partnera poprzez transfer.</li>
+</ul>
 <h2>Testowanie</h2>
 <p>Aby ułatwić testowanie, napisano program do generowania rozdań. Pozwalał on na wybranie dowolnej liczby kart dla gracza N, a następnie na wylosowanie pozostałych kart, także dla pozostałych graczy. Dzięki temu można było uzyskać pożądaną rękę, posiadając jednak resztę prawdziwej talii.</p>
-<p>Testowanie programu przebiegało w dwóch etapach. Pierwsza faza polegała na sprawdzaniu świeżo zaimplementowanej funkcjonalności podczas pisania kodu. Oprócz tego na bieżąco sprawdzano także na bieząco, czy nowo dodany kod nie miał wpływu na istniejące już reguły dla przykładowego scenariusza (np. otwarcie 1 w starszy kolor i poparcie partnera). Na koniec przeprowadzono testy dla scenariuszy skonstruowane tak, aby pokrywały najbardziej typowe przypadki dla użytych reguł. Nie sprawdzano jak system zachowałby się gdyby przeciwnicy wtrącili się do licytacji. Licytacja w obronie także nie została przetestowana.</p>
-<p>Oto scenariusze, które są rozgrywane poprawnie:
-<ul>
-<li>otwarcie 1 w starszy kolor, poparcie partnera,</li>
-<li>otwarcie 1 bez atu, sign off 3 bez atu</li>
-</ul></p>
-<p>Poniżej zaprezentowano przykładowe rozdanie i przebieg licytacji.</p>
+<p>Testowanie programu przebiegało w dwóch etapach. Pierwsza faza polegała na sprawdzaniu świeżo zaimplementowanej funkcjonalności podczas pisania kodu systemu eksperckiego. Oprócz tego sprawdzano, czy nowo dodany kod nie miał wpływu na istniejące już reguły dla przykładowego scenariusza (jak na przykład otwarcie 1 w starszy kolor i poparcie partnera). W drugim etapie, to jest po zakończeniu tworzenia kodu systemu eksperckiego, przeprowadzono testy dla różnych scenariuszy, skonstruowane tak, aby pokrywały typowe przypadki dla użytych reguł.</p>
+<p>Ciągi zaimplementowanych odzywek są bazowane w konwencji SAYC na fakcie, że przeciwnicy podczas licytacji pasują, wobec czego odzywka przeciwników inna niż pas w dowolnym momencie powoduje pasowanie przez bota w dalszej licytacji. Wyjątkiem jest sytuacja, gdy partner bota używa otwarcia blokującego, wtedy też w odpowiednich warunkach bot może przedłużyć blok po odzywce przeciwnika.</p>
+<p>Pominąwszy sytuacje, kiedy przeciwnicy nie pasują, bot działał bez zarzutu i licytował poprawnie, aczkolwiek zdarzały się przypadki, kiedy w odczuciu autorów bot powinien był zgłosić inną odzywkę mimo poprawności użytej. Dotyczy to otwarcia 1NT przy rozkładzie 5332 przy bardzo słabych krótszych kolorach. Poprawienie tej sytuacji wymagałoby rozważania liczby punktów dla każdego z kolorów z osobna zamiast tylko ich sumy.</p>
+<p>Poniżej zaprezentowano przykładowe rozdanie i przebieg licytacji oraz drugi przykład na zrzucie okna programu. </p>
 
 <div class="lrwrap">
 <div class="left">
@@ -139,17 +174,17 @@
 </p>
 
 <h2>GiB</h2>
-<p>Programem uważanym obecnie za najlepszego sztucznego gracza jest GiB. Potrafi on zarówno licytować, jak i prowadzić rozgrywkę. Wspierane systemy licytacji to m.in. SAYC, 2/1 GF, Acol. Jest on także używany jako bot do gry na portalu Bridge Base Online, największym miejscu w sieci, gdzie można zagrać online w brydża. Jedyne co wiadomo o jego działaniu, to że opiera sie na algorytmach przeszukiwania przy licytacji i rozgrywce. Niestety nie można było przetestować jego działania, ponieważ oprogramowanie to jest na płatnej licencji. Warto także wspomnieć, że program zebrał wiele pozytywnych opinii, m.in. w The Bridge World i Dutch Bridge Magazine IMP.</p>
+<p>Programem uważanym obecnie za najlepszego sztucznego gracza jest GiB. Potrafi on zarówno licytować, jak i prowadzić rozgrywkę. Wspierane systemy licytacji to m.in. SAYC, 2/1 GF, Acol. Jest on także używany jako bot do gry na portalu Bridge Base Online, największym miejscu w sieci, gdzie można zagrać online w brydża. Jedyne co wiadomo o jego działaniu, to że opiera sie na algorytmach przeszukiwania przy licytacji i rozgrywce. Niestety nie można było przetestować jego działania, ponieważ licencja tego oprogramowania jest płatna. Warto także wspomnieć, że program zebrał wiele pozytywnych opinii, m.in. w The Bridge World i Dutch Bridge Magazine IMP.</p>
 <h2>Wnioski</h2>
-<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu. Problem okazał się dużo bardziej złożony, niż to przewidywano na początku. Główną przyczyną był stopień skomplikowania rosnący wraz z implementowaniem kolejnych okrążeń licytacji. Drzewo możliwych przebiegów licytacji rośnie wykładniczo w miarę kolejnych odzywek. Powodowało to, że trzeba było brać pod uwagę coraz to nowe możliwości i wyjątki. W związku z tym czas potrzebny na realizację projektu był niewystarczający.</p>
-<p>Oprócz tego wybór narzędzi nie do końca był trafny. Autorzy uważają, że lepiej byłoby realizować ten projekt w Prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że Prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, których warunki w CLIPSie są sprawdzane jednocześnie. Dodatkowo CLIPS nie jest popularnym systemem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem Prolog zdecydowanie przewyższa CLIPSa.</p>
-<p>W ramach projektu została stworzona struktura ramowa pozwalająca na stworzenie zaawansowanego gracza. Możliwości rozwoju są duże. Przy rozwoju oprogramowania została wzięta pod uwagę opcja zmiany pozycji gracza. Dzięki temu można doprowadzić np. do gry 3 graczy wirtualnych z człowiekiem, co może być dobrym treningiem dla początkującego gracza.</p>
+<p>Zaimplementowanie całego systemu okazało się bardziej złożone, niż przewidywano na początku. Stopień skomplikowania zadania dobrze ilustruje fakt, że implementacja jedynie otwarć i odpowiedzi zajęła około tysiąca linii kodu dla systemu eksperckiego. Główną przyczyną była konieczność rozważania coraz większej liczby możliwych przebiegów licytacji przy wdrażaniu odzywek dla kolejnych okrążeń licytacji. Drzewo możliwych przebiegów licytacji rośnie w tempie wykładniczym w miarę udzielania kolejnych odzywek. Powodowało to konieczność brania pod uwagę coraz to innych możliwości i wyjątków. W związku z tym ilość czasu, potrzebna na realizację pełnego wachlarza odzywek, byłaby ogromna. Stworzenie w pełni działającego bota mogłoby z powodzeniem spełnić rolę co najmniej projektu inżynierskiego.</p>
+<p>Ponadto wybór narzędzi nie do końca był trafny. Autorzy są zdania, że lepiej byłoby realizować ten projekt w Prologu. Za tym rozwiązaniem przemawia kilka argumentów. Pierwszym z nich jest to, że Prolog sprawdza wszystkie reguły po kolei i wykonuje pierwszą, której warunki są spełnione. Dzięki temu dużo łatwiej jest zapanować nad dużą liczbą reguł, dla których warunki w przypadku CLIPSa są sprawdzane jednocześnie. Powoduje to konieczność precyzyjnego określania warunków, co polepsza kontrolę nad wyborem reguły do wywołania, ale równocześnie zwiększa stopień skomplikowania systemu.<br />Dodatkowo CLIPS nie jest popularnym środowiskiem. W Internecie istnieje mało samouczków, jak również język ten nie jest przedmiotem dyskusji na wielu forach. Jedynym źródłem wiedzy na temet tego systemu byłu jego podręczniki użytkownika napisane w dość niejasny sposób. Pod tym względem Prolog zdecydowanie przewyższa CLIPSa.</p>
+<p>W ramach projektu została stworzona struktura ramowa pozwalająca na stworzenie zaawansowanego gracza. Możliwości rozwoju programu są duże, są to przykładowo skompletowanie systemu licytacji z wykrzystaniem SAYC bądź implementacja innej konwencji. Przy rozwoju oprogramowania została wzięta pod uwagę opcja zmiany pozycji gracza. Dzięki temu można doprowadzić na przykład do gry 3 graczy wirtualnych z człowiekiem, co może być dobrym treningiem dla początkującego gracza.</p>
 <h2>Literatura</h2>
 <ol>
 <li>P. Szczepaniak, <a href="http://gerwazy.lo3.wroc.pl/~pszczepaniak/brydz/licytacja_PSz_sayc.pdf">System SAYC;</a></li>
 <li><a href="http://clipsrules.sourceforge.net/documentation/v630/bpg.pdf">CLIPS Reference Manual, Basic Programming Guide</a>;</li>
 <li><a href="http://clipsrules.sourceforge.net/documentation/v630/apg.pdf">CLIPS Reference Manual, Advanced Programming Guide</a>;</li>
-<li><a href="http://sequoia.ict.pwr.wroc.pl/~witold/ai/CLIPS_tutorial/CLIPS_tutorial_1.html">CLIPS tutorial</a>.</li>
+<li><a href="http://sequoia.ict.pwr.wroc.pl/~witold/ai/CLIPS_tutorial/CLIPS_tutorial_1.html">CLIPS tutorial</a>;</li>
 <li><a href="http://www.gibware.com/">GiB</a>.</li>
 </ol>
 </div>
